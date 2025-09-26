@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Motorista;
-use Illuminate\Suport\Facades\Log;
+use App\Models\Areaspatio;
+use Illuminate\Support\Facades\Log;
 
-class MotoristaController extends Controller
+class AreaspatioController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $funcaovisitante = Motorista::all();
-        return view("motorista.index", compact("motorista"));
+        $areaspatio = Areaspatio::all();
+        return view("areaspatio.index", compact("areaspatio"));
     }
 
     /**
@@ -22,7 +22,7 @@ class MotoristaController extends Controller
      */
     public function create()
     {
-        return view("motorista.create");
+        return view("areaspatio.create");
     }
 
     /**
@@ -31,15 +31,15 @@ class MotoristaController extends Controller
     public function store(Request $request)
     {
         try {
-            FuncaoVisitante::create($request->all());
-            return redirect()->route("motorista.index")
+            Areaspatio::create($request->all());
+            return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("areaspatio.index")
                     ->with("erro", "Erro ao inserir!");
         }
     }
@@ -49,8 +49,8 @@ class MotoristaController extends Controller
      */
     public function show(string $id)
     {
-        $motorista = FuncaoVisitante::findOrFail($id);
-        return view("motorista.show", compact("motorista"));
+        $areaspatio = Areaspatio::findOrFail($id);
+        return view("areaspatio.show", compact("areaspatio"));
     }
 
     /**
@@ -58,8 +58,8 @@ class MotoristaController extends Controller
      */
     public function edit(string $id)
     {
-        $motorista = FuncaoVisitante::findOrFail($id);
-        return view("motorista.edit", compact("motorista"));
+        $areaspatio = Areaspatio::findOrFail($id);
+        return view("areaspatio.edit", compact("areaspatio"));
     }
 
     /**
@@ -68,16 +68,16 @@ class MotoristaController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
-            $motorista->update($request->all());
-            return redirect()->route("motorista.index")
+            $areaspatio = Areaspatio::findOrFail($id);
+            $areaspatio->update($request->all());
+            return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro alterado!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("areaspatio.index")
                     ->with("erro", "Erro ao alterar!");
         }
     }
@@ -88,16 +88,16 @@ class MotoristaController extends Controller
     public function destroy(string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
-            $motorista->delete();
-            return redirect()->route("motorista.index")
+            $areaspatio = Areaspatio::findOrFail($id);
+            $areaspatio->delete();
+            return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){
             Log::error("Erro ao excluir o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'id' => $id
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("areaspatio.index")
                     ->with("erro", "Erro ao excluir!");
         }
     }

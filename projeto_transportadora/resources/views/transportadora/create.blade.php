@@ -2,7 +2,7 @@
 
 @section('conteudo')
 
-<h1>Nova Função de Visitante</h1>
+<h1>Nova Transportadora</h1>
 <form method="post" action="/transportadora">
     @CSRF
     <div class="mb-3">

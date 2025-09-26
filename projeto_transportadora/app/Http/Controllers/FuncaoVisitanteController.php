@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FuncaoVisitante;
-use Illuminate\Suport\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class FuncaoVisitanteController extends Controller
 {

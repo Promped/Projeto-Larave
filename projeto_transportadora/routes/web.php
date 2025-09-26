@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FuncaoVisitanteController;
 use App\Http\Controllers\TransportadoraController;
+use App\Http\Controllers\MotoristaController;
+use App\Http\Controllers\AreaspatioController;
 
 Route::get('/', function () {
     return view('welcome');

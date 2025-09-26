@@ -2,7 +2,7 @@
 
 @section('conteudo')
 
-<h2>Funções de Visitantes</h2>
+<h2>Transportadoras</h2>
     @if(session('sucesso'))
         <p class="text-success">{{ session('sucesso') }}</p>
     @endif
