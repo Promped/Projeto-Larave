@@ -3,11 +3,11 @@
 @section('conteudo')
 
 <h1>Nova Transportadora</h1>
-<form method="post" action="/transportadora">
-    @CSRF
+<form method="POST" action="{{ route('transportadora.store') }}">
+    @csrf
     <div class="mb-3">
-        <label for="nome" class="form-label">Informe a descrição:</label>
-        <input type="text" id="descricao" name="descricao" class="form-control" required="">
+        <label for="descricao" class="form-label">Informe a descrição:</label>
+        <input type="text" id="descricao" name="descricao" class="form-control" required>
     </div>
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
