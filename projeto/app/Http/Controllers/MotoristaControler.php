@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Motorista;
-use Illuminate\Suport\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class MotoristaController extends Controller
 {
@@ -13,7 +13,7 @@ class MotoristaController extends Controller
      */
     public function index()
     {
-        $funcaovisitante = Motorista::all();
+        $motorista = Motorista::all();
         return view("motorista.index", compact("motorista"));
     }
 
@@ -31,7 +31,7 @@ class MotoristaController extends Controller
     public function store(Request $request)
     {
         try {
-            FuncaoVisitante::create($request->all());
+            Motorista::create($request->all());
             return redirect()->route("motorista.index")
                     ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
@@ -49,7 +49,7 @@ class MotoristaController extends Controller
      */
     public function show(string $id)
     {
-        $motorista = FuncaoVisitante::findOrFail($id);
+        $motorista = Motorista::findOrFail($id);
         return view("motorista.show", compact("motorista"));
     }
 
@@ -58,7 +58,7 @@ class MotoristaController extends Controller
      */
     public function edit(string $id)
     {
-        $motorista = FuncaoVisitante::findOrFail($id);
+        $motorista = Motorista::findOrFail($id);
         return view("motorista.edit", compact("motorista"));
     }
 
@@ -68,7 +68,7 @@ class MotoristaController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
+            $motorista = Motorista::findOrFail($id);
             $motorista->update($request->all());
             return redirect()->route("motorista.index")
                     ->with("sucesso", "Registro alterado!");
@@ -88,7 +88,7 @@ class MotoristaController extends Controller
     public function destroy(string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
+            $motorista = Motorista::findOrFail($id);
             $motorista->delete();
             return redirect()->route("motorista.index")
                     ->with("sucesso", "Registro excluído!");

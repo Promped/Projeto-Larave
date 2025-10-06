@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transportadora;
-use Illuminate\Suport\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class TransportadoraController extends Controller
 {
@@ -49,8 +49,8 @@ class TransportadoraController extends Controller
      */
     public function show(string $id)
     {
-        $funcaovisitante = Transportadora::findOrFail($id);
-        return view("funcaovisitante.show", compact("funcaovisitante"));
+        $transportadora = Transportadora::findOrFail($id);
+        return view("transportadora.show", compact("transportadora"));
     }
 
     /**
@@ -58,8 +58,8 @@ class TransportadoraController extends Controller
      */
     public function edit(string $id)
     {
-        $funcaovisitante = Transportadora::findOrFail($id);
-        return view("funcaovisitante.edit", compact("funcaovisitante"));
+        $transportadora = Transportadora::findOrFail($id);
+        return view("transportadora.edit", compact("transportadora"));
     }
 
     /**
@@ -68,16 +68,16 @@ class TransportadoraController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $funcaovisitante = Transportadora::findOrFail($id);
-            $funcaovisitante->update($request->all());
-            return redirect()->route("funcaovisitante.index")
+            $transportadora = Transportadora::findOrFail($id);
+            $transportadora->update($request->all());
+            return redirect()->route("transportadora.index")
                     ->with("sucesso", "Registro alterado!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("funcaovisitante.index")
+            return redirect()->route("transportadora.index")
                     ->with("erro", "Erro ao alterar!");
         }
     }
@@ -88,16 +88,16 @@ class TransportadoraController extends Controller
     public function destroy(string $id)
     {
         try {
-            $funcaovisitante = Transportadora::findOrFail($id);
-            $funcaovisitante->delete();
-            return redirect()->route("funcaovisitante.index")
+            $transportadora = Transportadora::findOrFail($id);
+            $transportadora->delete();
+            return redirect()->route("transportadora.index")
                     ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){
             Log::error("Erro ao excluir o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'id' => $id
             ]);
-            return redirect()->route("funcaovisitante.index")
+            return redirect()->route("transportadora.index")
                     ->with("erro", "Erro ao excluir!");
         }
     }

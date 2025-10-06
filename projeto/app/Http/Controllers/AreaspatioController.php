@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Areaspatio;
-use Illuminate\Suport\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
-class FuncaoVisitanteController extends Controller
+class AreaspatioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,7 +31,7 @@ class FuncaoVisitanteController extends Controller
     public function store(Request $request)
     {
         try {
-            FuncaoVisitante::create($request->all());
+            Areaspatio::create($request->all());
             return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
@@ -49,7 +49,7 @@ class FuncaoVisitanteController extends Controller
      */
     public function show(string $id)
     {
-        $areaspatio = FuncaoVisitante::findOrFail($id);
+        $areaspatio = Areaspatio::findOrFail($id);
         return view("areaspatio.show", compact("areaspatio"));
     }
 
@@ -58,7 +58,7 @@ class FuncaoVisitanteController extends Controller
      */
     public function edit(string $id)
     {
-        $areaspatio = FuncaoVisitante::findOrFail($id);
+        $areaspatio = Areaspatio::findOrFail($id);
         return view("areaspatio.edit", compact("areaspatio"));
     }
 
@@ -68,7 +68,7 @@ class FuncaoVisitanteController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $areaspatio = FuncaoVisitante::findOrFail($id);
+            $areaspatio = Areaspatio::findOrFail($id);
             $areaspatio->update($request->all());
             return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro alterado!");
@@ -88,7 +88,7 @@ class FuncaoVisitanteController extends Controller
     public function destroy(string $id)
     {
         try {
-            $areaspatio = FuncaoVisitante::findOrFail($id);
+            $areaspatio = Areaspatio::findOrFail($id);
             $areaspatio->delete();
             return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro excluído!");
