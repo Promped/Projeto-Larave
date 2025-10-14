@@ -2,74 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Illuminate\support\Facades\Auth;
-use Illuminate\support\Facades\Log;
-use Illuminate\support\Facades\Hash;
 use App\Models\User;
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showFormLogin()
+    // Mostrar formulário de registro
+    public function showRegisterForm()
     {
-        return view("login");
+        return view('auth.register');
     }
 
-
-    public function ShowFormCadastro()
+    // Processar registro
+    public function register(Request $request)
     {
-    return view("cadastro");
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        Auth::login($user);
+
+        return redirect('/dashboard')->with('success', 'Registro realizado com sucesso!');
     }
 
-    public function cadastrarUsuario(Request $request){
-
-        try{
-            $dados = $request->all();
-            $dados['password'] = bcrypt($dados['password']);
-            User::create($dados);
-           
-            return redirect()->route('login')->with('success', 'Usuário cadastrado com sucesso');
-        }catch (Exception $e){
-            log::error('Erro ao cadastrar usuário: ' . $e->getMessage(), [
-                'stack' => $e->getTraceAsString(),
-                'request' => $request->all()
-            ]);
-            return redirect()->route('cadastro')->with('error', 'Erro ao cadastrar usuário');
-        }
-
-        
+    // Mostrar formulário de login
+    public function showLoginForm()
+    {
+        return view('auth.login');
     }
 
+    // Processar login
     public function login(Request $request)
     {
-         $credenciais = $request ->only('email', 'password');
-         if (Auth::attempt($credenciais)){
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('inicial');
-         } else{
-            return redirect()->route('login')
-            ->with('error', 'Email ou senha inválidos');
+            return redirect()->intended('/dashboard');
         }
+
+        return back()->withErrors([
+            'email' => 'As credenciais fornecidas não correspondem aos nossos registros.',
+        ])->onlyInput('email');
     }
 
+    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
-        
-
-    
+        return redirect('/');
     }
-
-
-
-
-
-
-
 }

@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\FuncaoVisitante;
+use App\Models\Motoristas;
 use Illuminate\Support\Facades\Log;
 
-class FuncaoVisitanteController extends Controller
+class MotoristasController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $funcaovisitante = FuncaoVisitante::all();
-        return view("funcaovisitante.index", compact("funcaovisitante"));
+        $motoristas = Motoristas::all();
+        return view("motoristas.index", compact("motoristas"));
     }
 
     /**
@@ -22,7 +22,7 @@ class FuncaoVisitanteController extends Controller
      */
     public function create()
     {
-        return view("funcaovisitante.create");
+        return view("motori$motoristas.create");
     }
 
     /**
@@ -32,14 +32,14 @@ class FuncaoVisitanteController extends Controller
     {
         try {
             Motorista::create($request->all());
-            return redirect()->route("motorista.index")
+            return redirect()->route("motoristas.index")
                     ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("motoristas.index")
                     ->with("erro", "Erro ao inserir!");
         }
     }
@@ -49,8 +49,8 @@ class FuncaoVisitanteController extends Controller
      */
     public function show(string $id)
     {
-        $motorista = Motorista::findOrFail($id);
-        return view("motorista.show", compact("motorista"));
+        $motoristas = Motoristas::findOrFail($id);
+        return view("motoristas.show", compact("motoristas"));
     }
 
     /**
@@ -58,8 +58,8 @@ class FuncaoVisitanteController extends Controller
      */
     public function edit(string $id)
     {
-        $motorista = FuncaoVisitante::findOrFail($id);
-        return view("motorista.edit", compact("motorista"));
+        $motoristas = Motoristas::findOrFail($id);
+        return view("motoristas.edit", compact("motoristas"));
     }
 
     /**
@@ -68,16 +68,16 @@ class FuncaoVisitanteController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
-            $motorista->update($request->all());
-            return redirect()->route("motorista.index")
+            $motoristas = Motoristas::findOrFail($id);
+            $motoristas->update($request->all());
+            return redirect()->route("motoristas.index")
                     ->with("sucesso", "Registro alterado!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("motoristas.index")
                     ->with("erro", "Erro ao alterar!");
         }
     }
@@ -88,16 +88,16 @@ class FuncaoVisitanteController extends Controller
     public function destroy(string $id)
     {
         try {
-            $motorista = FuncaoVisitante::findOrFail($id);
-            $motorista->delete();
-            return redirect()->route("motorista.index")
+            $motoristas = Motoristas::findOrFail($id);
+            $motoristas->delete();
+            return redirect()->route("motoristas.index")
                     ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){
             Log::error("Erro ao excluir o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'id' => $id
             ]);
-            return redirect()->route("motorista.index")
+            return redirect()->route("motoristas.index")
                     ->with("erro", "Erro ao excluir!");
         }
     }
