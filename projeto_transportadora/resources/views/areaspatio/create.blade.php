@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h1>Áreas patio</h1>
 <form method="post" action="/areaspatio">

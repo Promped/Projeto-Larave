@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Motoristas;
+use App\Models\Motorista;
 use Illuminate\Support\Facades\Log;
 
 class MotoristasController extends Controller
@@ -13,8 +13,8 @@ class MotoristasController extends Controller
      */
     public function index()
     {
-        $motoristas = Motoristas::all();
-        return view("motoristas.index", compact("motoristas"));
+        $motoristas = Motorista::all();
+    return view("motorista.index", compact("motoristas"));
     }
 
     /**
@@ -22,7 +22,7 @@ class MotoristasController extends Controller
      */
     public function create()
     {
-        return view("motori$motoristas.create");
+    return view("motorista.create");
     }
 
     /**
@@ -30,10 +30,18 @@ class MotoristasController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            Motorista::create($request->all());
-            return redirect()->route("motoristas.index")
-                    ->with("sucesso", "Registro inserido!");
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|size:11|unique:motoristas',
+            'cnh' => 'required|string|max:20',
+            'telefone' => 'required|string|max:20',
+            'transportadora_id' => 'required|exists:transportadoras,id'
+        ]);
+
+    try {
+        Motorista::create($validated);
+        return redirect()->route("motoristas.index")
+            ->with("sucesso", "Motorista cadastrado com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -49,8 +57,8 @@ class MotoristasController extends Controller
      */
     public function show(string $id)
     {
-        $motoristas = Motoristas::findOrFail($id);
-        return view("motoristas.show", compact("motoristas"));
+        $motorista = Motorista::findOrFail($id);
+    return view("motorista.show", compact("motorista"));
     }
 
     /**
@@ -58,8 +66,8 @@ class MotoristasController extends Controller
      */
     public function edit(string $id)
     {
-        $motoristas = Motoristas::findOrFail($id);
-        return view("motoristas.edit", compact("motoristas"));
+        $motorista = Motorista::findOrFail($id);
+    return view("motorista.edit", compact("motorista"));
     }
 
     /**
@@ -67,11 +75,19 @@ class MotoristasController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|size:11|unique:motoristas,cpf,'.$id,
+            'cnh' => 'required|string|max:20',
+            'telefone' => 'required|string|max:20',
+            'transportadora_id' => 'required|exists:transportadoras,id'
+        ]);
+
         try {
-            $motoristas = Motoristas::findOrFail($id);
-            $motoristas->update($request->all());
+            $motorista = Motorista::findOrFail($id);
+            $motorista->update($validated);
             return redirect()->route("motoristas.index")
-                    ->with("sucesso", "Registro alterado!");
+                    ->with("sucesso", "Motorista alterado com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -88,8 +104,8 @@ class MotoristasController extends Controller
     public function destroy(string $id)
     {
         try {
-            $motoristas = Motoristas::findOrFail($id);
-            $motoristas->delete();
+            $motorista = Motorista::findOrFail($id);
+            $motorista->delete();
             return redirect()->route("motoristas.index")
                     ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){

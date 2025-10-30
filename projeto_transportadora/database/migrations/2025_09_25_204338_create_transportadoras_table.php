@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('transportadoras', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->string('razao_social');
+            $table->string('cnpj')->unique();
+            $table->string('endereco');
+            $table->string('telefone');
+            $table->string('email')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

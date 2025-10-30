@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// Arquivo DEPRECATED: use App\Models\AreaPatio em vez de Areaspatio.
+// Este arquivo permanece temporariamente para compatibilidade, mas será
+// removido em breve. Ao ser carregado, gera um aviso deprecatório.
+trigger_error('App\\Models\\Areaspatio está obsoleto: use App\\Models\\AreaPatio em vez disso.', E_USER_DEPRECATED);
 
-class Areaspatio extends Model
+class Areaspatio extends AreaPatio
 {
-    protected $table = "areaspatio";
-    protected $fillable = ["descricao"];
+    // alias de compatibilidade (deprecated)
 }
+

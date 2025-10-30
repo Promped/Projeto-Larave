@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('areaspatio', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->string('nome');
+            $table->string('descricao')->nullable();
+            $table->integer('capacidade')->default(0);
+            $table->string('tipo')->nullable();
+            $table->string('status')->default('disponivel');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

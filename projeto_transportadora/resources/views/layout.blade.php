@@ -29,8 +29,22 @@
         </div>
     </nav>
 
-    <main class="container mx-auto mt-8">
-        @yield('content')
-    </main>
+    <div class="container mx-auto mt-6">
+        <div class="flex flex-col md:flex-row gap-6">
+            @auth
+                <div class="md:w-64">
+                    @include('partials.sidebar')
+                </div>
+                <main class="flex-1">
+                    @yield('content')
+                </main>
+            @else
+                <main class="w-full">
+                    @yield('content')
+                </main>
+            @endauth
+        </div>
+    </div>
+        <script src="{{ asset('js/validation.js') }}"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h2>Funções de Visitantes</h2>
     @if(session('sucesso'))

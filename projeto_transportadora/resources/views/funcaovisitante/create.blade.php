@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h1>Nova Função de Visitante</h1>
 <form method="post" action="/funcaovisitante">

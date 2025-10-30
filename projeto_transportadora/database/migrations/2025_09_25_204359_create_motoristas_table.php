@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('motoristas', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->string('nome');
+            $table->string('cpf')->unique();
+            $table->string('cnh');
+            $table->string('telefone');
+            $table->foreignId('transportadora_id')
+                  ->constrained()
+                  ->onDelete('cascade');
             $table->timestamps();
         });
     }

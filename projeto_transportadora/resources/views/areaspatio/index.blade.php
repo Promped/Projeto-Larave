@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h2>Áreas patio</h2>
     @if(session('sucesso'))

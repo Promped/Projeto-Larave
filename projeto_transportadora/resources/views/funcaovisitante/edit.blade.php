@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h1>Alterar dados</h1>
 <form method="post" action="/funcaovisitante/{{ $funcaovisitante->id }}">

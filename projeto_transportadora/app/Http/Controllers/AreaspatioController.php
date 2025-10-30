@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Areaspatio;
+use App\Models\AreaPatio;
 use Illuminate\Support\Facades\Log;
 
 class AreaspatioController extends Controller
@@ -13,8 +13,8 @@ class AreaspatioController extends Controller
      */
     public function index()
     {
-        $areaspatio = Areaspatio::all();
-        return view("areaspatio.index", compact("areaspatio"));
+    $areaspatio = AreaPatio::all();
+    return view("areaspatio.index", compact("areaspatio"));
     }
 
     /**
@@ -30,10 +30,18 @@ class AreaspatioController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'capacidade' => 'nullable|integer',
+            'tipo' => 'nullable|string',
+            'status' => 'nullable|string'
+        ]);
+
         try {
-            Areaspatio::create($request->all());
+            AreaPatio::create($validated);
             return redirect()->route("areaspatio.index")
-                    ->with("sucesso", "Registro inserido!");
+                    ->with("sucesso", "Área cadastrada com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -49,7 +57,7 @@ class AreaspatioController extends Controller
      */
     public function show(string $id)
     {
-        $areaspatio = Areaspatio::findOrFail($id);
+    $areaspatio = AreaPatio::findOrFail($id);
         return view("areaspatio.show", compact("areaspatio"));
     }
 
@@ -58,7 +66,7 @@ class AreaspatioController extends Controller
      */
     public function edit(string $id)
     {
-        $areaspatio = Areaspatio::findOrFail($id);
+    $areaspatio = AreaPatio::findOrFail($id);
         return view("areaspatio.edit", compact("areaspatio"));
     }
 
@@ -67,11 +75,19 @@ class AreaspatioController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'nullable|string',
+            'capacidade' => 'nullable|integer',
+            'tipo' => 'nullable|string',
+            'status' => 'nullable|string'
+        ]);
+
         try {
-            $areaspatio = Areaspatio::findOrFail($id);
-            $areaspatio->update($request->all());
+            $areaspatio = AreaPatio::findOrFail($id);
+            $areaspatio->update($validated);
             return redirect()->route("areaspatio.index")
-                    ->with("sucesso", "Registro alterado!");
+                    ->with("sucesso", "Área alterada com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -88,7 +104,7 @@ class AreaspatioController extends Controller
     public function destroy(string $id)
     {
         try {
-            $areaspatio = Areaspatio::findOrFail($id);
+            $areaspatio = AreaPatio::findOrFail($id);
             $areaspatio->delete();
             return redirect()->route("areaspatio.index")
                     ->with("sucesso", "Registro excluído!");

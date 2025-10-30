@@ -13,8 +13,8 @@ class TransportadoraController extends Controller
      */
     public function index()
     {
-        $transportadora = Transportadora::all();
-        return view("transportadora.index", compact("transportadora"));
+        $transportadoras = Transportadora::all();
+        return view("transportadora.index", compact("transportadoras"));
     }
 
     /**
@@ -30,16 +30,24 @@ class TransportadoraController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'razao_social' => 'required|string|max:255',
+            'cnpj' => 'required|string|unique:transportadoras',
+            'endereco' => 'required|string',
+            'telefone' => 'required|string|max:20',
+            'email' => 'required|email|unique:transportadoras',
+        ]);
+
         try {
-            Transportadora::create($request->all());
-            return redirect()->route("transportadora.index")
-                    ->with("sucesso", "Registro inserido!");
+            Transportadora::create($validated);
+            return redirect()->route("transportadoras.index")
+                    ->with("sucesso", "Transportadora cadastrada com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("transportadora.index")
+            return redirect()->route("transportadoras.index")
                     ->with("erro", "Erro ao inserir!");
         }
     }
@@ -67,17 +75,25 @@ class TransportadoraController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validated = $request->validate([
+            'razao_social' => 'required|string|max:255',
+            'cnpj' => 'required|string|unique:transportadoras,cnpj,'.$id,
+            'endereco' => 'required|string',
+            'telefone' => 'required|string|max:20',
+            'email' => 'required|email|unique:transportadoras,email,'.$id,
+        ]);
+
         try {
             $transportadora = Transportadora::findOrFail($id);
-            $transportadora->update($request->all());
-            return redirect()->route("transportadora.index")
-                    ->with("sucesso", "Registro alterado!");
+            $transportadora->update($validated);
+            return redirect()->route("transportadoras.index")
+                    ->with("sucesso", "Transportadora alterada com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("transportadora.index")
+            return redirect()->route("transportadoras.index")
                     ->with("erro", "Erro ao alterar!");
         }
     }
@@ -89,15 +105,15 @@ class TransportadoraController extends Controller
     {
         try {
             $transportadora = Transportadora::findOrFail($id);
-            $transportadora->delete();
-            return redirect()->route("transportadora.index")
-                    ->with("sucesso", "Registro excluído!");
+        $transportadora->delete();
+        return redirect()->route("transportadoras.index")
+            ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){
             Log::error("Erro ao excluir o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'id' => $id
             ]);
-            return redirect()->route("transportadora.index")
+        return redirect()->route("transportadoras.index")
                     ->with("erro", "Erro ao excluir!");
         }
     }

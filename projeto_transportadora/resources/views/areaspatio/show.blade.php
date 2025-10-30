@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('conteudo')
+@section('content')
 
 <h1>Consultar Dados</h1>
 <form method="post" action="/areaspatio/{{ $areaspatio->id }}">
