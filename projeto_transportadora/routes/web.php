@@ -42,6 +42,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/meu-painel', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
+
+         // Outras rotas de recursos (também protegidas)
+            Route::resource('funcaovisitantes', FuncaoVisitanteController::class);
+            Route::resource('transportadoras', TransportadoraController::class);
+            Route::resource('motoristas', MotoristasController::class);
+            Route::resource('cargas', App\Http\Controllers\CargaController::class);
+            Route::resource('areaspatio', AreaspatioController::class);
     });
 
     // Área do cliente
@@ -52,10 +59,5 @@ Route::middleware('auth')->group(function () {
         })->name('inicial-cli');
     });
 
-    // Outras rotas de recursos (também protegidas)
-    Route::resource('funcaovisitantes', FuncaoVisitanteController::class);
-    Route::resource('transportadoras', TransportadoraController::class);
-    Route::resource('motoristas', MotoristasController::class);
-    Route::resource('cargas', App\Http\Controllers\CargaController::class);
-    Route::resource('areaspatio', AreaspatioController::class);
+   
 });
