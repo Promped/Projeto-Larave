@@ -11,9 +11,9 @@ use App\Http\Middleware\NivelAdmMiddleware;
 use App\Http\Middleware\NivelCliMiddleware;
 use App\Http\Controllers\VeiculoController;
 
-// Rota inicial
+// Rota inicial - redireciona para a página inicial do sistema
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->to('/inicial');
 });
 
 // Rotas públicas de autenticação

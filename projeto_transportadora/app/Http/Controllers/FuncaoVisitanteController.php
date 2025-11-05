@@ -32,14 +32,14 @@ class FuncaoVisitanteController extends Controller
     {
         try {
             FuncaoVisitante::create($request->all());
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("erro", "Erro ao inserir!");
         }
     }
@@ -70,14 +70,14 @@ class FuncaoVisitanteController extends Controller
         try {
             $funcaovisitante = FuncaoVisitante::findOrFail($id);
             $funcaovisitante->update($request->all());
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("sucesso", "Registro alterado!");
         } catch(\Exception $e){
             Log::error("Erro ao alterar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'request' => $request->all()
             ]);
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("erro", "Erro ao alterar!");
         }
     }
@@ -90,14 +90,14 @@ class FuncaoVisitanteController extends Controller
         try {
             $funcaovisitante = FuncaoVisitante::findOrFail($id);
             $funcaovisitante->delete();
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("sucesso", "Registro excluído!");
         } catch(\Exception $e){
             Log::error("Erro ao excluir o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
                 'id' => $id
             ]);
-            return redirect()->route("funcaovisitante.index")
+        return redirect()->route("funcaovisitantes.index")
                     ->with("erro", "Erro ao excluir!");
         }
     }

@@ -3,7 +3,7 @@
 @section('content')
 
 <h1>Alterar dados</h1>
-<form method="post" action="/funcaovisitante/{{ $funcaovisitante->id }}">
+<form method="post" action="/funcaovisitantes/{{ $funcaovisitante->id }}">
     @CSRF
     @METHOD('PUT')
     <div class="mb-3">
