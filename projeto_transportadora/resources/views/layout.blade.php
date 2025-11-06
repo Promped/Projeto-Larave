@@ -46,5 +46,46 @@
         </div>
     </div>
         <script src="{{ asset('js/validation.js') }}"></script>
+        <script>
+            // Torna notificações com as classes bg-green-100 / bg-red-100 dismissible
+            (function(){
+                const selector = '.bg-green-100.border, .bg-red-100.border, .bg-green-100, .bg-red-100';
+                const flashes = document.querySelectorAll(selector);
+                flashes.forEach(el => {
+                    // evitar adicionar duas vezes
+                    if (el.dataset.dismissible) return;
+                    el.dataset.dismissible = '1';
+
+                    // wrapper para posicionamento relativo
+                    el.style.position = 'relative';
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.innerHTML = '✕';
+                    btn.setAttribute('aria-label','Fechar');
+                    btn.className = 'flash-close absolute top-2 right-2 text-gray-600 hover:text-gray-800';
+                    btn.style.background = 'transparent';
+                    btn.style.border = 'none';
+                    btn.style.fontSize = '1rem';
+                    btn.style.cursor = 'pointer';
+
+                    btn.addEventListener('click', function(){
+                        el.style.transition = 'opacity 200ms ease';
+                        el.style.opacity = '0';
+                        setTimeout(()=> el.remove(), 220);
+                    });
+
+                    el.appendChild(btn);
+
+                    // auto-dismiss after 6s
+                    setTimeout(()=>{
+                        if (!document.body.contains(el)) return;
+                        el.style.transition = 'opacity 400ms ease';
+                        el.style.opacity = '0';
+                        setTimeout(()=> el.remove(), 420);
+                    }, 6000);
+                });
+            })();
+        </script>
 </body>
 </html>

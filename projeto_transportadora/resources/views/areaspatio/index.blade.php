@@ -1,34 +1,51 @@
 @extends('layout')
 
 @section('content')
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Áreas do Pátio</h1>
+        <a href="/areaspatio/create" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Nova Área</a>
+    </div>
 
-<h2>Áreas patio</h2>
     @if(session('sucesso'))
-        <p class="text-success">{{ session('sucesso') }}</p>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {{ session('sucesso') }}
+        </div>
     @endif
     @if(session('erro'))
-        <p class="text-danger">{{ session('erro') }}</p>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ session('erro') }}
+        </div>
     @endif
-    <a href="/areaspatio/create" class="btn btn-success mb-3">Novo Registro</a>
-    <table class="table table-hover table-striped">
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Descrição</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($areaspatio as $c)
-            <tr>
-                <td>{{ $c->id }}</td>
-                <td>{{ $c->descricao }}</td>
-                <td class="d-flex gap-2">
-                    <a href="/areaspatio/{{ $c->id }}/edit" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="/areaspatio/{{ $c->id }}" class="btn btn-sm btn-info">Consultar</a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>    
 
+    @if($areaspatio->isEmpty())
+        <div class="text-gray-500 text-center py-8">Nenhuma área cadastrada.</div>
+    @else
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($areaspatio as $area)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->nome }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->descricao }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="/areaspatio/{{ $area->id }}/edit" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
+                            <a href="/areaspatio/{{ $area->id }}" class="text-blue-600 hover:text-blue-900">Visualizar</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
 @endsection
