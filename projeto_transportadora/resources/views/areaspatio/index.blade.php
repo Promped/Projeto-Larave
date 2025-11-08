@@ -28,16 +28,20 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capacidade</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">tipo</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($areaspatio as $area)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->nome }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $area->descricao }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td class="px-8 py-6 whitespace-nowrap text-sm text-gray-900">{{ $area->id }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm text-gray-900">{{ $area->nome }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm text-gray-900">{{ $area->descricao }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm text-gray-900">{{ $area->capacidade }}</th>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm text-gray-900">{{ $area->tipo }}</th>
+                        <td class="px-8 py-6 whitespace-nowrap text-right text-sm font-medium">
                             <a href="/areaspatio/{{ $area->id }}/edit" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
                             <a href="/areaspatio/{{ $area->id }}" class="text-blue-600 hover:text-blue-900">Visualizar</a>
                         </td>
