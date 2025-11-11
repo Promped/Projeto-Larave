@@ -26,7 +26,7 @@
 
         <div class="mb-4">
             <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
-            <input id="descricao" name="descricao" value="{{ old('empresa') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
+            <input id="empresa" name="empresa" value="{{ old('empresa') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
         </div>
 
         <div class="grid grid-cols-3 gap-4 mb-4">
@@ -36,7 +36,7 @@
             </div>
             <div>
                 <label for="tipo" class="block text-sm font-medium text-gray-700 mb-1">Periodo</label>
-                <input id="tipo" name="tipo" value="{{ old('periodo') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
+                <input id="periodo" name="periodo" value="{{ old('periodo') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
             </div>
         </div>
 

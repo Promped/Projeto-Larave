@@ -12,14 +12,10 @@ class FuncaoVisitante extends Model
     protected $table = 'funcoes_visitantes';
 
     protected $fillable = [
-        'descricao',
         'nome',
-        'documento',
         'empresa',
-        'motivo_visita',
-        'area_visitada',
-        'hora_entrada',
-        'hora_saida'
+        'funcao',
+        'periodo'
     ];
 
     /**
