@@ -25,7 +25,11 @@
         </div>
 
         <div class="mb-4">
-            <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+            <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <input id="descricao" name="descricao" value="{{ old('descricao') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2" required>
+        </div>
+        <div class="mb-4">
+            <label for="empresa" class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
             <input id="empresa" name="empresa" value="{{ old('empresa') }}" type="text" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2">
         </div>
 

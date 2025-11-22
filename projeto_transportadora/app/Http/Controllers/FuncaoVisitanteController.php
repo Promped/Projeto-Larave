@@ -32,15 +32,23 @@ class FuncaoVisitanteController extends Controller
     {
         try {
             FuncaoVisitante::create($request->all());
-        return redirect()->route("funcaovisitantes.index")
-                    ->with("sucesso", "Registro inserido!");
+            return redirect()->route("funcaovisitantes.index")
+                        ->with("sucesso", "Registro inserido!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
-                'request' => $request->all()
+                'request' => $request->all(),
+                'exception_class' => get_class($e),
+                'exception_code' => $e->getCode(),
+                'exception_file' => $e->getFile(),
+                'exception_line' => $e->getLine(),
             ]);
-        return redirect()->route("funcaovisitantes.index")
-                    ->with("erro", "Erro ao inserir!");
+            // Exibe o erro na tela em ambiente local para facilitar debug
+            if (config('app.env') === 'local' || config('app.debug')) {
+                return back()->withErrors('Erro ao inserir: ' . $e->getMessage());
+            }
+            return redirect()->route("funcaovisitantes.index")
+                        ->with("erro", "Erro ao inserir!");
         }
     }
 

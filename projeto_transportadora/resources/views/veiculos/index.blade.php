@@ -34,8 +34,32 @@
                             <td class="px-4 py-3 text-sm text-gray-700">{{ $veiculo->modelo }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700">{{ $veiculo->transportadora->razao_social ?? 'N/A' }}</td>
                             <td class="px-4 py-3 text-sm">
-                                <span class="px-2 py-1 rounded text-xs font-medium {{ $veiculo->status_acesso === 'ativo' ? 'bg-green-100 text-green-800' : ($veiculo->status_acesso === 'inativo' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                    {{ ucfirst($veiculo->status_acesso) }}
+                                @php
+                                    $status = $veiculo->status_acesso;
+                                    $badgeClasses = 'px-2 py-1 rounded text-xs font-medium select-none ';
+                                    if ($status === 'ativo') {
+                                        $badgeClasses .= 'bg-green-100 text-green-800';
+                                    } elseif ($status === 'inativo') {
+                                        $badgeClasses .= 'bg-yellow-100 text-yellow-800';
+                                    } elseif ($status === 'bloqueado') {
+                                        $badgeClasses .= 'bg-red-100 text-red-800';
+                                    } else {
+                                        $badgeClasses .= 'bg-gray-100 text-gray-800';
+                                    }
+                                @endphp
+                                <span data-status-badge class="{{ $badgeClasses }}"
+                                      style="pointer-events: none; user-select: none; position: relative; z-index: 1;">
+                                    {{ ucfirst($status) }}
+                                    <style>
+                                        [data-status-badge] svg,
+                                        [data-status-badge] button,
+                                        [data-status-badge] .close,
+                                        [data-status-badge]::after,
+                                        [data-status-badge]::before {
+                                            display: none !important;
+                                            content: none !important;
+                                        }
+                                    </style>
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-right text-sm">

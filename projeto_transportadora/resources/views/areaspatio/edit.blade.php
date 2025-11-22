@@ -18,7 +18,7 @@
         @csrf
         @method('PUT')
 
-        <div>
+        <div class>
             <label for="nome" class="block text-sm font-medium text-gray-700">Nome*</label>
             <input id="nome" name="nome" value="{{ old('nome', $areaspatio->nome) }}" required
                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
