@@ -2,7 +2,11 @@
 
 @section('title', 'Meu Painel')
 
-
+@php
+use App\Models\Veiculo;
+use App\Models\Motorista;
+use App\Models\Transportadora;
+@endphp
 
 @section('content')
 <div class="bg-white shadow-md rounded-lg p-6">
@@ -12,15 +16,15 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-blue-100 p-4 rounded-lg">
             <h3 class="font-bold text-blue-800">Total de Veículos</h3>
-            <p class="text-2xl">{{ $totalVeiculos ?? 0 }}</p>
+            <p class="text-2xl">{{ Veiculo::count() }}</p>
         </div>
         <div class="bg-green-100 p-4 rounded-lg">
             <h3 class="font-bold text-green-800">Total de Motoristas</h3>
-            <p class="text-2xl">{{ $totalMotoristas ?? 0 }}</p>
+            <p class="text-2xl">{{ Motorista::count() }}</p>
         </div>
         <div class="bg-purple-100 p-4 rounded-lg">
             <h3 class="font-bold text-purple-800">Total de Transportadoras</h3>
-            <p class="text-2xl">{{ $totalTransportadoras ?? 0 }}</p>
+            <p class="text-2xl">{{ Transportadora::count() }}</p>
         </div>
     </div>
 

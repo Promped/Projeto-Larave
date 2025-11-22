@@ -7,18 +7,25 @@
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow p-4">
-                <h3 class="text-center mb-4">Login</h3>
-                
+<div class="container-fluid min-vh-100 d-flex align-items-stretch justify-content-center bg-light p-0">
+    <div class="row w-100 h-100 flex-nowrap m-0" style="min-height: 100vh;">
+        <!-- Lado da imagem -->
+        <div class="col-md-6 d-none d-md-flex p-0" style="background: #1565c0 url('{{ asset('caminhoes.png') }}') center center / cover no-repeat; min-height: 100vh; min-width: 0;">
+        </div>
+        <!--formulário -->
+        <div class="col-12 col-md-6 d-flex align-items-center justify-content-center p-5" style="min-height: 100vh; min-width: 0; background: #cfe4fdff;">
+            <div class="w-100" style="max-width: 350px;">
+                <div class="mb-4">
+                    <div class="mb-4" style="margin-top: -1.5rem;">
+                        <span class="fw-semibold" style="font-size: 1.1rem; letter-spacing: 1px; color: #222;">Suzano Logística</span>
+                    </div>
+                    <h3 class="fw-bold" style="font-size: 2rem;">Login</h3>
+                </div>
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         {{ $errors->first() }}
                     </div>
                 @endif
-
                 <form method="POST" action="/login">
                     @csrf
                     <div class="mb-3">
@@ -36,7 +43,6 @@
                         </div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="password" class="form-label">Senha</label>
                         <input type="password" 
@@ -50,7 +56,6 @@
                         </div>
                         @enderror
                     </div>
-
                     <button type="submit" class="btn btn-primary w-100">Entrar</button>
                 </form>
             </div>

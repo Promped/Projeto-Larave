@@ -40,10 +40,7 @@ Route::middleware('auth')->group(function () {
         })->name('inicial-adm');
         
         Route::get('/meu-painel', function () {
-            $totalVeiculos = \App\Models\Veiculo::count();
-            $totalMotoristas = \App\Models\Motorista::count();
-            $totalTransportadoras = \App\Models\Transportadora::count();
-            return view('admin.dashboard', compact('totalVeiculos', 'totalMotoristas', 'totalTransportadoras'));
+            return view('admin.dashboard');
         })->name('admin.dashboard');
 
          // Outras rotas de recursos (também protegidas)
