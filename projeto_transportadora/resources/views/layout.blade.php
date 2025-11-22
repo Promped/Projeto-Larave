@@ -56,18 +56,15 @@
     </div>
         <script src="{{ asset('js/validation.js') }}"></script>
         <script>
-            // Torna notificações com as classes bg-green-100 / bg-red-100 dismissible
+            // Torna apenas alertas (mensagens flash) dismissíveis, não os cards do dashboard
             (function(){
-                const selector = '.bg-green-100.border, .bg-red-100.border, .bg-green-100, .bg-red-100';
+                // Seleciona apenas elementos de alerta, por exemplo, que tenham a classe 'alert' ou 'flash-message'
+                const selector = '.alert, .flash-message';
                 const flashes = document.querySelectorAll(selector);
                 flashes.forEach(el => {
-                    // evitar adicionar duas vezes
                     if (el.dataset.dismissible) return;
                     el.dataset.dismissible = '1';
-
-                    // wrapper para posicionamento relativo
                     el.style.position = 'relative';
-
                     const btn = document.createElement('button');
                     btn.type = 'button';
                     btn.innerHTML = '✕';
@@ -77,16 +74,12 @@
                     btn.style.border = 'none';
                     btn.style.fontSize = '1rem';
                     btn.style.cursor = 'pointer';
-
                     btn.addEventListener('click', function(){
                         el.style.transition = 'opacity 200ms ease';
                         el.style.opacity = '0';
                         setTimeout(()=> el.remove(), 220);
                     });
-
                     el.appendChild(btn);
-
-                    // auto-dismiss after 6s
                     setTimeout(()=>{
                         if (!document.body.contains(el)) return;
                         el.style.transition = 'opacity 400ms ease';
