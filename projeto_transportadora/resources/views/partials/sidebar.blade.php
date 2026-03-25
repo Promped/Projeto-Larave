@@ -4,9 +4,9 @@
         
         <nav class="flex flex-col gap-1">
             <a href="{{ route('admin.dashboard') }}" 
-               class="px-3 py-2 rounded hover:bg-blue-50 font-semibold flex items-center {{ request()->routeIs('admin.dashboard') ? 'bg-blue-100 text-blue-800' : 'text-blue-700' }}">
-                <span class="mr-2">📊</span> Painel Geral
-            </a>
+                class="px-3 py-2 rounded hover:bg-blue-50 font-semibold flex items-center {{ request()->routeIs('admin.dashboard') || request()->routeIs('inicial-adm') ? 'bg-blue-100 text-blue-800' : 'text-blue-700' }}">
+                    <span class="mr-2">📊</span> Painel Geral
+                </a>
 
             <div class="mt-4 mb-1 px-3 text-xs font-bold text-blue-500 uppercase tracking-wider">
                 Operação de Pátio

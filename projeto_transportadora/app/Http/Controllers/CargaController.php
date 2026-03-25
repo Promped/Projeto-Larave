@@ -4,84 +4,60 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Carga;
-use App\Models\Veiculo;
-use App\Models\Motorista;
+use App\Models\AreaPatio;
+use App\Models\Veiculo;         
+use App\Models\Motorista;       
+use App\Models\Transportadora; 
+use App\Models\Estoque; 
 
 class CargaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
-{
-    $cargas = Carga::paginate(10);
-    return view('cargas.index', compact('cargas'));
-}
-
-public function create()
-{
-    return view('cargas.create');
-}
-
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'tipo' => 'required|string|max:255',
-        'unidade_medida' => 'required|string',
-        'descricao' => 'nullable|string',
-    ]);
-
-    Carga::create($validated);
-    return redirect()->route('cargas.index')->with('success', 'Tipo de carga cadastrado!');
-}
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
     {
-        $carga = Carga::with(['veiculo','motorista'])->findOrFail($id);
-        return view('cargas.show', compact('carga'));
-    }
+        $stats = [
+            'total_veiculos' => Veiculo::count(),
+            'total_motoristas' => Motorista::count(),
+            'total_transportadoras' => Transportadora::count(),
+        ];
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $carga = Carga::findOrFail($id);
-        $veiculos = Veiculo::all();
-        $motoristas = Motorista::all();
-        return view('cargas.edit', compact('carga','veiculos','motoristas'));
-    }
+        // 1. Dados das Barras (Individual)
+        $dadosBarras = Estoque::selectRaw('nome as label, SUM(quantidade_atual) as total')
+            ->groupBy('nome')
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $carga = Carga::findOrFail($id);
-        $validated = $request->validate([
-            'tipo' => 'required|string',
-            'peso' => 'nullable|numeric',
-            'volume' => 'nullable|numeric',
-            'origem' => 'nullable|string',
-            'destino' => 'nullable|string',
-            'veiculo_id' => 'nullable|exists:veiculos,id',
-            'motorista_id' => 'nullable|exists:motoristas,id',
-        ]);
+        // 2. Dados da Pizza (Ocupação Total vs Limite X)
+        $estoqueGeral = Estoque::selectRaw('SUM(quantidade_atual) as ocupado, SUM(limite_maximo) as limite')
+            ->first();
 
-        $carga->update($validated);
-        return redirect()->route('cargas.index')->with('success','Carga atualizada');
-    }
+        $totalOcupado = $estoqueGeral->ocupado ?? 0;
+        $limiteTotal = $estoqueGeral->limite ?? 100;
+        $espacoLivre = max(0, $limiteTotal - $totalOcupado);
+        
+        // Calcula a porcentagem para o alerta
+        $percentualOcupado = ($totalOcupado / $limiteTotal) * 100;
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $carga = Carga::findOrFail($id);
-        $carga->delete();
-        return redirect()->route('cargas.index')->with('success','Carga excluída');
+        // 3. Ocupação das Áreas (Pátio)
+        $areas = AreaPatio::all()->map(function($area) {
+            $area->veiculos_atual = 0; 
+            $area->vagas_totais = $area->capacidade ?? 10;
+            $area->ocupacao_percent = $area->vagas_totais > 0 
+                ? ($area->veiculos_atual / $area->vagas_totais) * 100 
+                : 0;
+            return $area;
+        });
+
+        if (request()->routeIs('admin.dashboard') || request()->routeIs('inicial-adm') || request()->path() == 'meu-painel') {
+            return view('dashboard', [
+                'stats' => $stats,
+                'areas' => $areas,
+                'labels' => $dadosBarras->pluck('label'), 
+                'valores' => $dadosBarras->pluck('total'),
+                'dadosPizza' => [$totalOcupado, $espacoLivre],
+                'percentual' => $percentualOcupado,
+                'limiteTotal' => $limiteTotal
+            ]);
+        }
+
+        return view('cargas.index', ['cargas' => Carga::paginate(10)]);
     }
 }

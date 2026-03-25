@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cadastro', [AuthController::class, 'showFormCadastro'])->name('cadastro');
-Route::post('/cadastro', [AuthController::class, 'cadastrarUsuario']); // Linha 30 corrigida aqui
+Route::post('/cadastro', [AuthController::class, 'cadastrarUsuario']); // Corrigido: Route:: adicionado
 
 // Rotas protegidas (requerem autenticação)
 Route::middleware('auth')->group(function () {
@@ -42,13 +42,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('veiculos', VeiculoController::class);
         Route::resource('clientes', ClienteController::class);
         
-        Route::get('/inicial-adm', function () {
-            return view('inicial-adm');
-        })->name('inicial-adm');
-        
-        Route::get('/meu-painel', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        // DASHBOARD: Agora aponta para o CargaController@index para carregar os dados de ocupação
+        Route::get('/inicial-adm', [CargaController::class, 'index'])->name('inicial-adm');
+        Route::get('/meu-painel', [CargaController::class, 'index'])->name('admin.dashboard');
 
         // --- CADASTROS BASE (F_B) ---
         Route::resource('funcaovisitantes', FuncaoVisitanteController::class); 
@@ -60,7 +56,6 @@ Route::middleware('auth')->group(function () {
 
         // --- OPERAÇÃO DE PÁTIO (F_F) ---
         Route::prefix('patio')->group(function () {
-            // F_F01: Agendamentos
             Route::resource('agendamentos', AgendamentoController::class);
 
             // F_F03: Entrada/Saída
@@ -75,9 +70,8 @@ Route::middleware('auth')->group(function () {
         });
 
         // --- PRODUÇÃO & ESTOQUE (F_F) ---
-        // Movidos para fora do prefixo patio para URLs mais limpas e compatibilidade com Sidebar
-        Route::resource('estoque', EstoqueController::class); // F_F08
-        Route::resource('producao', ProducaoController::class); // F_F09
+        Route::resource('estoque', EstoqueController::class); 
+        Route::resource('producao', ProducaoController::class); 
         Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
 
         // --- RELATÓRIOS E SAÍDAS (F_S) ---
