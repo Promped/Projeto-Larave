@@ -37,6 +37,11 @@
             <div class="mt-4 mb-1 px-3 text-xs font-bold text-gray-400 uppercase tracking-wider">
                 Cadastros Base
             </div>
+
+            <a href="{{ route('transportadoras.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
+                <span class="mr-2">🏢</span> F_B04: Fornecedores
+            </a>
+
             <a href="{{ route('veiculos.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
                 <span class="mr-2">🚚</span> F_B01: Veículos
             </a>
@@ -46,9 +51,7 @@
             <a href="{{ route('cargas.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
                 <span class="mr-2">📦</span> F_B03: Cargas
             </a>
-            <a href="{{ route('transportadoras.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
-                <span class="mr-2">🏢</span> F_B04: Fornecedores
-            </a>
+           
             <a href="{{ route('funcaovisitantes.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
                  <span class="mr-2">🛂</span> F_B06: Funções Visitantes
             </a>
@@ -66,7 +69,18 @@
             <a href="#" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
                 <span class="mr-2">📈</span> F_S01: Relatórios Gerenciais
             </a>
-            {{-- Restante dos links... --}}
+
+            <a href="{{ route('relatorios.historico') }}" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
+                <span class="mr-2">📜</span> F_S02: Histórico de Movimentação
+            </a>
+
+            
+            <a href="#" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
+                <span class="mr-2">🛒</span> F_S03: Histórico de Compras MP
+            </a>
+            <a href="#" class="px-3 py-2 rounded hover:bg-red-50 text-red-700 text-sm flex items-center font-bold">
+                <span class="mr-2">🚨</span> F_S04: Alerta de Estoque Crítico
+            </a>
         </nav>
     </div>
 </aside>

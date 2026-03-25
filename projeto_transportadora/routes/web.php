@@ -14,6 +14,7 @@ use App\Http\Controllers\GerenciamentoPatioController;
 use App\Http\Controllers\CargaController;
 use App\Http\Controllers\VagasPatioController; 
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\RelatorioController; // NOVO: Para as F_Ss
 
 // Rota inicial
 Route::get('/', function () {
@@ -34,7 +35,7 @@ Route::middleware('auth')->group(function () {
         return view('inicial');
     })->name('inicial');
 
-    // Área do administrador
+    // Área do administrador (TUDO DO PÁTIO FICA AQUI)
     Route::middleware([NivelAdmMiddleware::class])->group(function () {
         Route::resource('veiculos', VeiculoController::class);
         Route::resource('clientes', ClienteController::class);
@@ -47,33 +48,41 @@ Route::middleware('auth')->group(function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
-        // --- CADASTROS BASE ---
-        // RESTAURADO: Mantendo o nome original para não quebrar o formulário pronto
+        // --- CADASTROS BASE (F_B) ---
         Route::resource('funcaovisitantes', FuncaoVisitanteController::class); 
-        
         Route::resource('transportadoras', TransportadoraController::class);
         Route::resource('motoristas', MotoristasController::class);
         Route::resource('cargas', CargaController::class);
         Route::resource('areaspatio', AreaspatioController::class);
         Route::resource('vagas', VagasPatioController::class);
 
-        // --- OPERAÇÃO DE PÁTIO (FUNÇÕES FUNDAMENTAIS) ---
-Route::prefix('patio')->group(function () {
-    
-    // F_F01: Aqui entra o controller novo que fizemos
-    Route::resource('agendamentos', AgendamentoController::class);
+        // --- OPERAÇÃO DE PÁTIO (F_F) ---
+        Route::prefix('patio')->group(function () {
+            // F_F01: Agendamentos
+            Route::resource('agendamentos', AgendamentoController::class);
 
-    // F_F03: Suas rotas de Entrada/Saída que já existiam
-    Route::get('/entrada', [GerenciamentoPatioController::class, 'indexEntrada'])->name('patio.entrada');
-    Route::post('/entrada', [GerenciamentoPatioController::class, 'storeEntrada'])->name('patio.entrada.store');
-    
-    Route::get('/saida', [GerenciamentoPatioController::class, 'indexSaida'])->name('patio.saida');
-    Route::post('/saida/{id}', [GerenciamentoPatioController::class, 'registrarSaida'])->name('patio.saida.store');
+            // F_F03: Entrada/Saída
+            Route::get('/entrada', [GerenciamentoPatioController::class, 'indexEntrada'])->name('patio.entrada');
+            Route::post('/entrada', [GerenciamentoPatioController::class, 'storeEntrada'])->name('patio.entrada.store');
+            Route::get('/saida', [GerenciamentoPatioController::class, 'indexSaida'])->name('patio.saida');
+            Route::post('/saida/{id}', [GerenciamentoPatioController::class, 'registrarSaida'])->name('patio.saida.store');
 
-    // F_F04: Sua rota de Ocorrência
-    Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
-    Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
-});
+            // F_F04: Ocorrências
+            Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
+            Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
+
+            // F_F08 e F_F09: Estoque e Produção (Rotas de exemplo para não dar erro na sidebar)
+            Route::get('/estoque', function() { return view('estoque.index'); })->name('estoque.index');
+            Route::get('/producao', function() { return view('producao.index'); })->name('producao.index');
+        });
+
+        // --- RELATÓRIOS E SAÍDAS (F_S) ---
+        Route::prefix('relatorios')->group(function () {
+            Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); // F_S01
+            Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); // F_S02
+            Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');     // F_S03
+        });
+
     });
 
     // Área do cliente
