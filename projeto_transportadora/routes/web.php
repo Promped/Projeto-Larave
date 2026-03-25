@@ -14,7 +14,8 @@ use App\Http\Controllers\GerenciamentoPatioController;
 use App\Http\Controllers\CargaController;
 use App\Http\Controllers\VagasPatioController; 
 use App\Http\Controllers\AgendamentoController;
-use App\Http\Controllers\RelatorioController; // NOVO: Para as F_Ss
+use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\ProducaoController; // IMPORTANTE: Adicionado para F_F09
 
 // Rota inicial
 Route::get('/', function () {
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
         return view('inicial');
     })->name('inicial');
 
-    // Área do administrador (TUDO DO PÁTIO FICA AQUI)
+    // Área do administrador
     Route::middleware([NivelAdmMiddleware::class])->group(function () {
         Route::resource('veiculos', VeiculoController::class);
         Route::resource('clientes', ClienteController::class);
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('areaspatio', AreaspatioController::class);
         Route::resource('vagas', VagasPatioController::class);
 
-        // --- OPERAÇÃO DE PÁTIO (F_F) ---
+        // --- OPERAÇÃO DE PÁTIO, ESTOQUE E PRODUÇÃO (F_F) ---
         Route::prefix('patio')->group(function () {
             // F_F01: Agendamentos
             Route::resource('agendamentos', AgendamentoController::class);
@@ -71,18 +72,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
 
-            // F_F08 e F_F09: Estoque e Produção (Rotas de exemplo para não dar erro na sidebar)
+            // F_F08: Estoque (Por enquanto mantendo a view simples)
             Route::get('/estoque', function() { return view('estoque.index'); })->name('estoque.index');
-            Route::get('/producao', function() { return view('producao.index'); })->name('producao.index');
+            
+            // F_F09: Produção (ROTAS REAIS INTEGRADAS)
+            Route::get('/producao', [ProducaoController::class, 'index'])->name('producao.index');
+            Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
         });
 
         // --- RELATÓRIOS E SAÍDAS (F_S) ---
-        // --- RELATÓRIOS E SAÍDAS (F_S) ---
-            Route::prefix('relatorios')->group(function () {
-                Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); // ESTA AQUI!
-                Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); 
-                Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');     
-            });
+        Route::prefix('relatorios')->group(function () {
+            Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); 
+            Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); 
+            Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');     
+        });
 
     });
 

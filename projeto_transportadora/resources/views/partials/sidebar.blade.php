@@ -10,7 +10,6 @@
             <div class="mt-4 mb-1 px-3 text-xs font-bold text-blue-500 uppercase tracking-wider">
                 Operação de Pátio
             </div>
-            {{-- CORRIGIDO: Agora aponta para a rota resource plural --}}
             <a href="{{ route('agendamentos.index') }}" class="px-3 py-2 rounded hover:bg-green-50 text-gray-700 border-l-4 border-transparent hover:border-green-500 text-sm">
                 📅 F_F01: Agendamentos
             </a>
@@ -27,10 +26,12 @@
             <div class="mt-4 mb-1 px-3 text-xs font-bold text-orange-600 uppercase tracking-wider">
                 Produção & Estoque
             </div>
-            <a href="#" class="px-3 py-2 rounded hover:bg-orange-50 text-gray-700 text-sm flex items-center">
+            {{-- ATUALIZADO: Aponta para a rota de estoque --}}
+            <a href="{{ route('estoque.index') }}" class="px-3 py-2 rounded hover:bg-orange-50 text-gray-700 text-sm flex items-center">
                 <span class="mr-2">📦</span> F_F08: Estoque
             </a>
-            <a href="#" class="px-3 py-2 rounded hover:bg-orange-50 text-gray-700 text-sm flex items-center">
+            {{-- ATUALIZADO: Aponta para a rota real de produção --}}
+            <a href="{{ route('producao.index') }}" class="px-3 py-2 rounded hover:bg-orange-50 text-gray-700 text-sm flex items-center">
                 <span class="mr-2">🛠️</span> F_F09: Produção
             </a>
 
@@ -59,7 +60,6 @@
                 <span class="mr-2">📍</span> F_B07: Áreas
             </a>
             <a href="{{ route('vagas.index') }}" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs flex items-center">
-                {{-- Aqui você pode manter F_B07 ou F_B08 conforme sua imagem --}}
                 <span class="mr-2">🅿️</span> F_B08: Gestão de Vagas
             </a>
 
@@ -74,11 +74,12 @@
                 <span class="mr-2">📜</span> F_S02: Histórico de Movimentação
             </a>
 
-            
-            <a href="#" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
+            <a href="{{ route('relatorios.compras') }}" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
                 <span class="mr-2">🛒</span> F_S03: Histórico de Compras MP
             </a>
-            <a href="#" class="px-3 py-2 rounded hover:bg-red-50 text-red-700 text-sm flex items-center font-bold">
+            
+            {{-- ATUALIZADO: O Alerta F_S04 agora aponta para o Gerencial, onde o alerta pisca --}}
+            <a href="{{ route('relatorios.gerencial') }}" class="px-3 py-2 rounded hover:bg-red-50 text-red-700 text-sm flex items-center font-bold">
                 <span class="mr-2">🚨</span> F_S04: Alerta de Estoque Crítico
             </a>
         </nav>
