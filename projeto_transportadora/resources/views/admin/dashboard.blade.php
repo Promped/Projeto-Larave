@@ -1,69 +1,76 @@
-@extends('layout')
+@extends('layout') {{-- Ajustado para o nome correto do seu arquivo --}}
 
-@section('title', 'Meu Painel')
-
-@php
-use App\Models\Veiculo;
-use App\Models\Motorista;
-use App\Models\Transportadora;
-@endphp
+@section('title', 'Cadastro de Materiais')
 
 @section('content')
-<div class="bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-bold mb-6">Painel de Controle</h1>
-    <p class="text-gray-600 mb-4">Visualização de dados</p>
+<div class="p-8 bg-slate-50 min-h-screen">
+    {{-- CABEÇALHO DA PÁGINA --}}
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h2 class="text-2xl font-black text-slate-800 tracking-tighter flex items-center gap-2 italic">
+                <span class="text-[#0046AD]">F_B03:</span> Cadastro de Materiais (Cargas)
+            </h2>
+            <p class="text-slate-500 text-sm font-medium">Gerencie os tipos de materiais que circulam no pátio.</p>
+        </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <button id="btn-veiculos" class="bg-blue-100 p-4 rounded-lg w-full text-left focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <h3 class="font-bold text-blue-800">Total de Veículos</h3>
-            <p class="text-2xl">{{ Veiculo::count() }}</p>
-        </button>
-        <button id="btn-motoristas" class="bg-green-100 p-4 rounded-lg w-full text-left focus:outline-none focus:ring-2 focus:ring-green-400">
-            <h3 class="font-bold text-green-800">Total de Motoristas</h3>
-            <p class="text-2xl">{{ Motorista::count() }}</p>
-        </button>
-        <button id="btn-transportadoras" class="bg-purple-100 p-4 rounded-lg w-full text-left focus:outline-none focus:ring-2 focus:ring-purple-400">
-            <h3 class="font-bold text-purple-800">Total de Transportadoras</h3>
-            <p class="text-2xl">{{ Transportadora::count() }}</p>
-        </button>
+        {{-- BOTÃO NOVO MATERIAL --}}
+        <a href="{{ route('cargas.create') }}" class="bg-[#00A859] hover:bg-[#008F4C] text-white px-6 py-3 rounded-xl transition-all font-bold text-sm flex items-center gap-2 shadow-lg shadow-[#00A859]/20 group">
+            <span class="text-lg group-hover:rotate-90 transition-transform duration-300">➕</span> Novo Material
+        </a>
     </div>
 
-    <div class="bg-white border rounded-lg p-6 min-h-[16rem]">
-        <h2 id="detalhe-titulo" class="text-xl font-bold mb-4">Selecione um card para ver detalhes</h2>
-        <hr id="detalhe-divider" class="my-4 border-t-2 border-gray-200 hidden" />
-        <div id="detalhe-conteudo"></div>
-    </div>
-    <script>
-        const veiculos = @json(App\Models\Veiculo::select('placa','tipo','modelo')->get());
-        const motoristas = @json(App\Models\Motorista::with('transportadora')->get(['nome','transportadora_id']));
-        const transportadoras = @json(App\Models\Transportadora::select('razao_social','telefone')->get());
+    {{-- ALERTAS --}}
+    @if (session('success'))
+        <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#00A859] text-green-700 rounded-r-xl shadow-sm font-bold flex items-center">
+            <span class="mr-3">✅</span> {{ session('success') }}
+        </div>
+    @endif
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('btn-veiculos').onclick = function() {
-                document.getElementById('detalhe-titulo').innerText = 'Total de Veículos !';
-                document.getElementById('detalhe-divider').classList.remove('hidden');
-                document.getElementById('detalhe-conteudo').innerHTML = veiculos.length ?
-                    `<ul class='list-disc pl-6 space-y-2'>` +
-                        veiculos.map(v => `<li class='bg-gray-50 rounded p-2'><b>Placa:</b> ${v.placa || '-'} <span class='mx-2 text-gray-300'>|</span> <b>Tipo:</b> ${v.tipo || '-'} <span class='mx-2 text-gray-300'>|</span> <b>Modelo:</b> ${v.modelo || '-'}</li>`).join('') +
-                    `</ul>` : '<p class="text-gray-500"> Nenhum veículo cadastrado. </p>';
-            };
-            document.getElementById('btn-motoristas').onclick = function() {
-                document.getElementById('detalhe-titulo').innerText = 'Total de Motoristas !';
-                document.getElementById('detalhe-divider').classList.remove('hidden');
-                document.getElementById('detalhe-conteudo').innerHTML = motoristas.length ?
-                    `<ul class='list-disc pl-6 space-y-2'>` +
-                    motoristas.map(m => `<li class='bg-gray-50 rounded p-2'><b>Nome:</b> ${m.nome || '-'} <span class='mx-2 text-gray-300'>|</span> <b>Transportadora:</b> ${(m.transportadora && m.transportadora.razao_social) ? m.transportadora.razao_social : '-'}</li>`).join('') +
-                    `</ul>` : '<p class="text-gray-500">Nenhum motorista cadastrado.</p>';
-            };
-            document.getElementById('btn-transportadoras').onclick = function() {
-                document.getElementById('detalhe-titulo').innerText = 'Total de Transportadoras !';
-                document.getElementById('detalhe-divider').classList.remove('hidden');
-                document.getElementById('detalhe-conteudo').innerHTML = transportadoras.length ?
-                    `<ul class='list-disc pl-6 space-y-2'>` +
-                    transportadoras.map(t => `<li class='bg-gray-50 rounded p-2'><b>Razão Social:</b> ${t.razao_social || '-'} <span class='mx-2 text-gray-300'>|</span> <b>Telefone:</b> ${t.telefone || '-'}</li>`).join('') +
-                    `</ul>` : '<p class="text-gray-500">Nenhuma transportadora cadastrada.</p>';
-            };
-        });
-    </script>
+    {{-- TABELA --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Nome / Tipo</th>
+                    <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Unidade</th>
+                    <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Descrição</th>
+                    <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @forelse($cargas as $carga)
+                    <tr class="hover:bg-slate-50/50 transition-colors group">
+                        <td class="px-6 py-4 font-bold text-slate-700">{{ $carga->tipo }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="bg-blue-50 text-[#0046AD] text-[10px] font-black px-2 py-1 rounded-md uppercase border border-blue-100">
+                                {{ $carga->unidade_medida }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-slate-500 text-sm italic">{{ $carga->descricao ?? 'Sem descrição' }}</td>
+                        <td class="px-6 py-4 text-right space-x-3">
+                            <a href="{{ route('cargas.edit', $carga->id) }}" class="text-[#0046AD] hover:text-blue-800 font-bold text-sm">Editar</a>
+                            
+                            <form action="{{ route('cargas.destroy', $carga->id) }}" method="POST" class="inline">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm" onclick="return confirm('Excluir este material?')">
+                                    Excluir
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">
+                            Nenhum material cadastrado no sistema.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6">
+        {{ $cargas->links() }}
+    </div>
 </div>
 @endsection
