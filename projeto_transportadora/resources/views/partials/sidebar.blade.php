@@ -66,7 +66,7 @@
             <div class="mt-4 mb-1 px-3 text-xs font-bold text-purple-600 uppercase tracking-wider">
                 Relatórios & Saída
             </div>
-            <a href="#" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
+            <a href="{{ route('relatorios.gerencial') }}" class="px-3 py-2 rounded hover:bg-purple-50 text-purple-700 text-sm flex items-center">
                 <span class="mr-2">📈</span> F_S01: Relatórios Gerenciais
             </a>
 

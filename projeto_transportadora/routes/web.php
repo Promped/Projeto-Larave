@@ -77,11 +77,12 @@ Route::middleware('auth')->group(function () {
         });
 
         // --- RELATÓRIOS E SAÍDAS (F_S) ---
-        Route::prefix('relatorios')->group(function () {
-            Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); // F_S01
-            Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); // F_S02
-            Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');     // F_S03
-        });
+        // --- RELATÓRIOS E SAÍDAS (F_S) ---
+            Route::prefix('relatorios')->group(function () {
+                Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); // ESTA AQUI!
+                Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); 
+                Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');     
+            });
 
     });
 
