@@ -12,6 +12,9 @@ use App\Models\Estoque;
 
 class CargaController extends Controller
 {
+    /**
+     * Exibe a listagem de cargas ou o Dashboard administrativo
+     */
     public function index()
     {
         $stats = [
@@ -34,7 +37,7 @@ class CargaController extends Controller
         $espacoLivre = max(0, $limiteTotal - $totalOcupado);
         
         // Calcula a porcentagem para o alerta
-        $percentualOcupado = ($totalOcupado / $limiteTotal) * 100;
+        $percentualOcupado = $limiteTotal > 0 ? ($totalOcupado / $limiteTotal) * 100 : 0;
 
         // 3. Ocupação das Áreas (Pátio)
         $areas = AreaPatio::all()->map(function($area) {
@@ -46,6 +49,7 @@ class CargaController extends Controller
             return $area;
         });
 
+        // Lógica para decidir se exibe o Dashboard ou a listagem de Cargas
         if (request()->routeIs('admin.dashboard') || request()->routeIs('inicial-adm') || request()->path() == 'meu-painel') {
             return view('dashboard', [
                 'stats' => $stats,
@@ -59,5 +63,26 @@ class CargaController extends Controller
         }
 
         return view('cargas.index', ['cargas' => Carga::paginate(10)]);
+    }
+
+    /**
+     * Exibe o formulário de criação de nova carga (Novo Material)
+     * Mantém o estilo que você já tem na view.
+     */
+    public function create()
+    {
+        return view('cargas.create');
+    }
+
+    /**
+     * Salva a nova carga no banco de dados (MODO TESTE FLASH)
+     */
+    public function store(Request $request)
+    {
+        // Pega tudo que o formulário enviar e tenta criar
+        Carga::create($request->all());
+
+        // Redireciona de volta para a lista
+        return redirect()->route('cargas.index');
     }
 }
