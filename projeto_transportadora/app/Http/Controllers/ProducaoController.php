@@ -14,18 +14,17 @@ class ProducaoController extends Controller
     }
 
     public function baixarEstoque(Request $request)
-    {
-        $insumo = Insumo::findOrFail($request->insumo_id);
-        
-        // Verifica se tem estoque suficiente antes de produzir
-        if ($insumo->quantidade_atual < $request->quantidade_usada) {
-            return back()->with('erro', 'Estoque insuficiente para produzir!');
-        }
-
-        // F_F09: Subtrai a quantidade usada da matéria-prima
-        $insumo->quantidade_atual -= $request->quantidade_usada;
-        $insumo->save();
-
-        return redirect()->route('producao.index')->with('sucesso', 'Produção finalizada e estoque atualizado!');
+{
+    $insumo = App\Models\Insumo::findOrFail($request->insumo_id);
+    
+    if ($insumo->quantidade_atual < $request->quantidade_usada) {
+        // Redireciona com erro se tentar usar mais do que tem no pátio/almoxarifado
+        return back()->with('erro', 'Saldo insuficiente!'); 
     }
+
+    $insumo->quantidade_atual -= $request->quantidade_usada;
+    $insumo->save();
+
+    return back()->with('sucesso', 'Estoque atualizado com sucesso!');
+}
 }

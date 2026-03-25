@@ -15,7 +15,8 @@ use App\Http\Controllers\CargaController;
 use App\Http\Controllers\VagasPatioController; 
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\RelatorioController;
-use App\Http\Controllers\ProducaoController; // IMPORTANTE: Adicionado para F_F09
+use App\Http\Controllers\ProducaoController;
+use App\Http\Controllers\EstoqueController; // IMPORTANTE: Importado aqui
 
 // Rota inicial
 Route::get('/', function () {
@@ -72,10 +73,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
 
-            // F_F08: Estoque (Por enquanto mantendo a view simples)
-            Route::get('/estoque', function() { return view('estoque.index'); })->name('estoque.index');
+            // F_F08: Estoque (AGORA COMO RESOURCE PARA CRUD COMPLETO)
+            Route::resource('estoque', EstoqueController::class);
             
-            // F_F09: Produção (ROTAS REAIS INTEGRADAS)
+            // F_F09: Produção
             Route::get('/producao', [ProducaoController::class, 'index'])->name('producao.index');
             Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
         });
