@@ -13,40 +13,27 @@ class CargaController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $cargas = Carga::with(['veiculo','motorista'])->paginate(10);
-        return view('cargas.index', compact('cargas'));
-    }
+{
+    $cargas = Carga::paginate(10);
+    return view('cargas.index', compact('cargas'));
+}
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $veiculos = Veiculo::all();
-        $motoristas = Motorista::all();
-        return view('cargas.create', compact('veiculos','motoristas'));
-    }
+public function create()
+{
+    return view('cargas.create');
+}
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'tipo' => 'required|string',
-            'peso' => 'nullable|numeric',
-            'volume' => 'nullable|numeric',
-            'origem' => 'nullable|string',
-            'destino' => 'nullable|string',
-            'veiculo_id' => 'nullable|exists:veiculos,id',
-            'motorista_id' => 'nullable|exists:motoristas,id',
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'tipo' => 'required|string|max:255',
+        'unidade_medida' => 'required|string',
+        'descricao' => 'nullable|string',
+    ]);
 
-        Carga::create($validated);
-
-        return redirect()->route('cargas.index')->with('success','Carga criada com sucesso');
-    }
+    Carga::create($validated);
+    return redirect()->route('cargas.index')->with('success', 'Tipo de carga cadastrado!');
+}
 
     /**
      * Display the specified resource.

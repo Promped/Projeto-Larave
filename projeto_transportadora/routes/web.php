@@ -16,7 +16,7 @@ use App\Http\Controllers\VagasPatioController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\ProducaoController;
-use App\Http\Controllers\EstoqueController; // IMPORTANTE: Importado aqui
+use App\Http\Controllers\EstoqueController;
 
 // Rota inicial
 Route::get('/', function () {
@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/cadastro', [AuthController::class, 'showFormCadastro'])->name('cadastro');
-Route::post('/cadastro', [AuthController::class, 'cadastrarUsuario']);
+Route::post('/cadastro', [AuthController::class, 'cadastrarUsuario']); // Linha 30 corrigida aqui
 
 // Rotas protegidas (requerem autenticação)
 Route::middleware('auth')->group(function () {
@@ -54,11 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('funcaovisitantes', FuncaoVisitanteController::class); 
         Route::resource('transportadoras', TransportadoraController::class);
         Route::resource('motoristas', MotoristasController::class);
-        Route::resource('cargas', CargaController::class);
-        Route::resource('areaspatio', AreaspatioController::class);
-        Route::resource('vagas', VagasPatioController::class);
+        Route::resource('cargas', CargaController::class); // F_B03
+        Route::resource('areaspatio', AreaspatioController::class); // F_B07
+        Route::resource('vagas', VagasPatioController::class); // F_B08
 
-        // --- OPERAÇÃO DE PÁTIO, ESTOQUE E PRODUÇÃO (F_F) ---
+        // --- OPERAÇÃO DE PÁTIO (F_F) ---
         Route::prefix('patio')->group(function () {
             // F_F01: Agendamentos
             Route::resource('agendamentos', AgendamentoController::class);
@@ -72,14 +72,13 @@ Route::middleware('auth')->group(function () {
             // F_F04: Ocorrências
             Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
-
-            // F_F08: Estoque (AGORA COMO RESOURCE PARA CRUD COMPLETO)
-            Route::resource('estoque', EstoqueController::class);
-            
-            // F_F09: Produção
-            Route::get('/producao', [ProducaoController::class, 'index'])->name('producao.index');
-            Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
         });
+
+        // --- PRODUÇÃO & ESTOQUE (F_F) ---
+        // Movidos para fora do prefixo patio para URLs mais limpas e compatibilidade com Sidebar
+        Route::resource('estoque', EstoqueController::class); // F_F08
+        Route::resource('producao', ProducaoController::class); // F_F09
+        Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
 
         // --- RELATÓRIOS E SAÍDAS (F_S) ---
         Route::prefix('relatorios')->group(function () {

@@ -11,21 +11,7 @@ class Carga extends Model
 
     protected $fillable = [
         'tipo',
-        'peso',
-        'volume',
-        'origem',
-        'destino',
-        'veiculo_id',
-        'motorista_id'
+        'unidade_medida',
+        'descricao'
     ];
-
-    public function veiculo()
-    {
-        return $this->belongsTo(Veiculo::class);
-    }
-
-    public function motorista()
-    {
-        return $this->belongsTo(Motorista::class);
-    }
 }

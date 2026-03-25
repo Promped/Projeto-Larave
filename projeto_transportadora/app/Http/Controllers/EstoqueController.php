@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Insumo;
+use App\Models\Areaspatio; // IMPORTANTE: Importando o model de áreas
 
 class EstoqueController extends Controller
 {
@@ -14,33 +15,36 @@ class EstoqueController extends Controller
         return view('estoque.index', compact('insumos'));
     }
 
-    // ESSA É A FUNÇÃO QUE ESTÁ FALTANDO NO SEU ERRO:
+    // Mostra o formulário de criação carregando as áreas do F_B07
     public function create()
     {
-        return view('estoque.create');
+        $areas = Areaspatio::all(); // Busca todas as áreas cadastradas
+        return view('estoque.create', compact('areas'));
     }
 
     // Salva o novo insumo
     public function store(Request $request)
-    {
-        $request->validate([
-            'nome'              => 'required|string|max:255',
-            'local_armazenagem' => 'required|string',
-            'quantidade_atual'  => 'required|numeric|min:0',
-            'quantidade_minima' => 'required|numeric|min:0',
-            'limite_maximo'     => 'required|numeric|min:1',
-            'unidade_medida'    => 'required|string',
-        ]);
+{
+    $request->validate([
+        'nome'              => 'required|string|max:255',
+        'local_armazenagem' => 'required|string',
+        'quantidade_atual'  => 'required|numeric|min:0',
+        'quantidade_minima' => 'required|numeric|min:0',
+        'limite_maximo'     => 'required|numeric|min:1', // O valor vem do JS
+        'unidade_medida'    => 'required|string',
+    ]);
 
-        Insumo::create($request->all());
+    Insumo::create($request->all());
 
-        return redirect()->route('estoque.index')->with('success', 'Insumo adicionado!');
-    }
+    return redirect()->route('estoque.index')->with('success', 'Insumo adicionado com sucesso!');
+}
 
+    // Carrega o insumo e as áreas disponíveis para edição
     public function edit($id)
     {
         $insumo = Insumo::findOrFail($id);
-        return view('estoque.edit', compact('insumo'));
+        $areas = Areaspatio::all(); // Busca as áreas para poder trocar se precisar
+        return view('estoque.edit', compact('insumo', 'areas'));
     }
 
     public function update(Request $request, $id)
@@ -57,13 +61,13 @@ class EstoqueController extends Controller
         $insumo = Insumo::findOrFail($id);
         $insumo->update($request->all());
 
-        return redirect()->route('estoque.index')->with('success', 'Estoque atualizado!');
+        return redirect()->route('estoque.index')->with('success', 'Estoque atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
         $insumo = Insumo::findOrFail($id);
         $insumo->delete();
-        return redirect()->route('estoque.index')->with('success', 'Item removido!');
+        return redirect()->route('estoque.index')->with('success', 'Item removido do estoque!');
     }
 }
