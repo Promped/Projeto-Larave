@@ -62,12 +62,10 @@ Route::middleware('auth')->group(function () {
             Route::resource('agendamentos', AgendamentoController::class);
 
             // F_F03: Entrada/Saída
-            // Colocamos a rota customizada ANTES do resource para garantir prioridade
             Route::patch('movimentacoes/{id}/sair', [MovimentacaoPatioController::class, 'registrarSaida'])->name('movimentacoes.sair');
             Route::resource('movimentacoes', MovimentacaoPatioController::class);
 
-            // F_F04: Ocorrências
-            Route::get('/ocorrencia', [GerenciamentoPatioController::class, 'indexOcorrencia'])->name('patio.ocorrencia');
+            // F_F04: Ocorrências (APENAS O POST PARA SALVAR AQUI)
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
         });
 
@@ -80,10 +78,12 @@ Route::middleware('auth')->group(function () {
         Route::prefix('relatorios')->group(function () {
             Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); 
             Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); 
-            Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras'); 
-            Route::get('/ocorrencias', [RelatorioController::class, 'ocorrencias'])->name('patio.ocorrencia'); 
+            Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');  
+
+            // ESTA ROTA ABAIXO É A QUE ATENDE SIDEBAR E BOTÃO "VER DETALHES"
+            Route::get('/ocorrencias', [RelatorioController::class, 'ocorrencias'])->name('patio.ocorrencia');
         });
-        
+
     });
 
     // Área do cliente
