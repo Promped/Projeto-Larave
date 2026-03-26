@@ -13,21 +13,28 @@
 
             {{-- OPERAÇÃO DE PÁTIO --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
-                Operação de Pátio
+                Operação de Pátio 
             </div>
-            
+
+            {{-- F_F01 --}}
             <a href="{{ route('agendamentos.index') }}" 
-               class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('agendamentos.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('agendamentos.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">📅</span> F_F01: Agendamentos
             </a>
 
-            {{-- MODULOS EM DESENVOLVIMENTO --}}
-            <a href="javascript:void(0)" onclick="aviso('F_F03')" class="px-4 py-2.5 rounded-lg text-sm flex items-center text-white/40 hover:bg-white/5 italic">
-                <span class="mr-3 text-base opacity-40">🚛</span> F_F03: Entradas / Saídas
+            {{-- F_F03 --}}
+            <a href="{{ route('movimentacoes.index') }}" 
+                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('movimentacoes.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                <span class="mr-3 text-base">🚛</span> F_F03: Entradas / Saídas
             </a>
-            <a href="javascript:void(0)" onclick="aviso('F_F04')" class="px-4 py-2.5 rounded-lg text-sm flex items-center text-white/40 hover:bg-white/5 italic">
-                <span class="mr-3 text-base opacity-40">⚠️</span> F_F04: Ocorrências
+
+            {{-- F_F04: OCORRÊNCIAS (Apontando para a função do RelatorioController corrigida) --}}
+            <a href="{{ route('patio.ocorrencia') }}" 
+                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('patio.ocorrencia') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                <span class="mr-3 text-base">⚠️</span> F_F04: Ocorrências
             </a>
+
+            {{-- F_F05 --}}
             <a href="javascript:void(0)" onclick="aviso('F_F05')" class="px-4 py-2.5 rounded-lg text-sm flex items-center text-white/40 hover:bg-white/5 italic">
                 <span class="mr-3 text-base opacity-40">✅</span> F_F05: Liberação
             </a>
@@ -42,12 +49,12 @@
                 <span class="mr-3 text-base">📦</span> F_F08: Estoque
             </a>
 
-            <a href="{{ route('producao.index') }}" onclick="alert('Atenção: Módulo F_F09 em fase de finalização. O acesso é permitido, mas algumas funções podem estar instáveis.')"
+            <a href="{{ route('producao.index') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('producao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">🛠️</span> F_F09: Produção
             </a>
 
-            {{-- CADASTROS BASE (VOLTANDO AO NORMAL) --}}
+            {{-- CADASTROS BASE --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
                 Cadastros Base
             </div>
@@ -82,10 +89,6 @@
             <a href="{{ route('relatorios.historico') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.historico') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">📜</span> F_S02: Histórico
-            </a>
-
-            <a href="javascript:void(0)" onclick="aviso('F_S03')" class="px-4 py-2.5 rounded-lg text-sm flex items-center text-white/40 hover:bg-white/5 italic">
-                <span class="mr-3 text-base opacity-40">🛒</span> F_S03: Compras MP
             </a>
 
             <a href="{{ route('relatorios.gerencial') }}" 

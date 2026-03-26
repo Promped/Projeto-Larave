@@ -9,13 +9,14 @@ class Motorista extends Model
 {
     protected $table = "motoristas";
     
-    protected $fillable = [
-        'nome',
-        'cpf',
-        'cnh',
-        'telefone',
-        'transportadora_id'
-    ];
+            protected $fillable = [
+            'nome',
+            'cpf',
+            'cnh',
+            'telefone',
+            'transportadora_id',
+            'status' // ADICIONE ESTA LINHA AQUI!
+        ];
 
     public function transportadora()
     {

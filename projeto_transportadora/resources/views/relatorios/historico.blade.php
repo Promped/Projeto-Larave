@@ -11,23 +11,29 @@
                     <th class="py-3 px-6 text-left">Data/Hora</th>
                     <th class="py-3 px-6 text-left">Veículo</th>
                     <th class="py-3 px-6 text-left">Motorista</th>
-                    <th class="py-3 px-6 text-center">Status</th>
+                    <th class="py-3 px-6 text-center">Status no Pátio</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 text-sm">
                 @foreach($historico as $item)
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    {{-- Formata a data de criação do registro --}}
                     <td class="py-3 px-6">{{ $item->created_at->format('d/m/Y H:i') }}</td>
                     
-                    {{-- O ?? 'N/A' evita erro se o veículo for deletado do banco --}}
-                    <td class="py-3 px-6">{{ $item->veiculo->placa ?? 'Não informado' }}</td>
-                    <td class="py-3 px-6">{{ $item->motorista->nome ?? 'Não informado' }}</td>
+                    {{-- Note que agora acessamos através de agendamento->veiculo --}}
+                    <td class="py-3 px-6">{{ $item->agendamento->veiculo->placa ?? 'N/A' }}</td>
+                    <td class="py-3 px-6">{{ $item->agendamento->motorista->nome ?? 'N/A' }}</td>
                     
                     <td class="py-3 px-6 text-center">
-                        {{-- O status padrão que vimos na sua migration é 'pendente' --}}
-                        <span class="bg-green-200 text-green-700 py-1 px-3 rounded-full text-xs">
-                            {{ ucfirst($item->status) }}
+                        @php
+                            // Lógica de cores baseada no status da movimentação
+                            $cor = 'bg-gray-200 text-gray-700';
+                            if($item->status == 'Em Espera') $cor = 'bg-yellow-200 text-yellow-700';
+                            if($item->status == 'Em Descarga') $cor = 'bg-blue-200 text-blue-700';
+                            if($item->status == 'Finalizado') $cor = 'bg-green-200 text-green-700';
+                            if($item->status == 'Saída Realizada') $cor = 'bg-red-200 text-red-700';
+                        @endphp
+                        <span class="{{ $cor }} py-1 px-3 rounded-full text-xs font-bold">
+                            {{ $item->status }}
                         </span>
                     </td>
                 </tr>

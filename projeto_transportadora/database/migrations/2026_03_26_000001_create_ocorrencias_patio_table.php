@@ -13,7 +13,7 @@ return new class extends Migration
 {
     Schema::create('ocorrencias_patio', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('movimentacao_id')->constrained('movimentacoes_patio');
+        $table->foreignId('movimentacao_id')->nullable()->constrained('movimentacoes_patio');
         $table->enum('tipo', ['seguranca', 'avaria', 'atraso', 'nao_conformidade']); // F_F04
         $table->text('descricao');
         $table->string('evidencias')->nullable(); // Para fotos/docs F_F04

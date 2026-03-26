@@ -17,7 +17,7 @@
             <div class="w-100" style="max-width: 350px;">
                 <div class="mb-4">
                     <div class="mb-4" style="margin-top: -1.5rem;">
-                        <span class="fw-semibold" style="font-size: 1.1rem; letter-spacing: 1px; color: #222;">Suzano Logística</span>
+                        <span class="fw-semibold" style="font-size: 1.1rem; letter-spacing: 1px; color: #222;">LogisticsPro</span>
                     </div>
                     <h3 class="fw-bold" style="font-size: 2rem;">Login</h3>
                 </div>

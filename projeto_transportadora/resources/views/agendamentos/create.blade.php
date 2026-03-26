@@ -6,7 +6,18 @@
         <h1 class="text-2xl font-bold text-gray-800">Novo Agendamento (F_F01)</h1>
         <p class="text-sm text-gray-600">Reserve uma janela de horário para operação de carga/descarga.</p>
     </div>
-
+        {{-- Alerta de Bloqueio Crítico --}}
+@if (session('error_bloqueio'))
+    <div class="mb-6 p-5 bg-red-600 text-white rounded-xl shadow-lg border-l-8 border-black animate-bounce">
+        <div class="flex items-center">
+            <span class="text-3xl mr-4">🚫</span>
+            <div>
+                <h4 class="font-black uppercase">Veículo Bloqueado no Sistema!</h4>
+                <p class="text-sm opacity-90">{{ session('error_bloqueio') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
     <form action="{{ route('agendamentos.store') }}" method="POST">
         @csrf
 
@@ -23,15 +34,18 @@
             </div>
 
             {{-- Motorista (F_B02) --}}
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Motorista</label>
-                <select name="motorista_id" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                    <option value="">Selecione o motorista...</option>
-                    @foreach($motoristas as $motorista)
-                        <option value="{{ $motorista->id }}">{{ $motorista->nome }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Motorista</label>
+                    <select name="motorista_id" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">Selecione o motorista...</option>
+                        @foreach($motoristas as $motorista)
+                            <option value="{{ $motorista->id }}" {{ $motorista->status !== 'Ativo' ? 'class=text-red-500' : '' }}>
+                                {{ $motorista->nome }} 
+                                {{ $motorista->status !== 'Ativo' ? "({$motorista->status})" : "" }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
             {{-- Carga (F_B03) --}}
             <div>

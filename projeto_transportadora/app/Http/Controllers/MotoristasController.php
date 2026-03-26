@@ -14,7 +14,7 @@ class MotoristasController extends Controller
     public function index()
     {
         $motoristas = Motorista::all();
-    return view("motorista.index", compact("motoristas"));
+        return view("motorista.index", compact("motoristas"));
     }
 
     /**
@@ -22,7 +22,7 @@ class MotoristasController extends Controller
      */
     public function create()
     {
-    return view("motorista.create");
+        return view("motorista.create");
     }
 
     /**
@@ -35,13 +35,14 @@ class MotoristasController extends Controller
             'cpf' => 'required|string|size:11|unique:motoristas',
             'cnh' => 'required|string|max:20',
             'telefone' => 'required|string|max:20',
-            'transportadora_id' => 'required|exists:transportadoras,id'
+            'transportadora_id' => 'required|exists:transportadoras,id',
+            'status' => 'required|string' // ADICIONADO PARA O ROBERSVALDO NÃO TRAVAR
         ]);
 
-    try {
-        Motorista::create($validated);
-        return redirect()->route("motoristas.index")
-            ->with("sucesso", "Motorista cadastrado com sucesso!");
+        try {
+            Motorista::create($validated);
+            return redirect()->route("motoristas.index")
+                ->with("sucesso", "Motorista cadastrado com sucesso!");
         } catch(\Exception $e){
             Log::error("Erro ao salvar o registro! ".$e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -58,7 +59,7 @@ class MotoristasController extends Controller
     public function show(string $id)
     {
         $motorista = Motorista::findOrFail($id);
-    return view("motorista.show", compact("motorista"));
+        return view("motorista.show", compact("motorista"));
     }
 
     /**
@@ -67,7 +68,7 @@ class MotoristasController extends Controller
     public function edit(string $id)
     {
         $motorista = Motorista::findOrFail($id);
-    return view("motorista.edit", compact("motorista"));
+        return view("motorista.edit", compact("motorista"));
     }
 
     /**
@@ -80,7 +81,8 @@ class MotoristasController extends Controller
             'cpf' => 'required|string|size:11|unique:motoristas,cpf,'.$id,
             'cnh' => 'required|string|max:20',
             'telefone' => 'required|string|max:20',
-            'transportadora_id' => 'required|exists:transportadoras,id'
+            'transportadora_id' => 'required|exists:transportadoras,id',
+            'status' => 'required|string' // ADICIONADO PARA ATUALIZAR STATUS
         ]);
 
         try {

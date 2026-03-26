@@ -31,4 +31,7 @@ class Agendamento extends Model
     public function vaga() {
         return $this->belongsTo(VagasPatio::class, 'vaga_id');
     }
+    public function carga() {
+        return $this->belongsTo(Carga::class);
+    }
 }

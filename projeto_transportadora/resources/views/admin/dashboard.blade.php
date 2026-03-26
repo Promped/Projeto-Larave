@@ -1,4 +1,4 @@
-@extends('layout') {{-- Ajustado para o nome correto do seu arquivo --}}
+@extends('layout')
 
 @section('title', 'Cadastro de Materiais')
 
@@ -19,14 +19,20 @@
         </a>
     </div>
 
-    {{-- ALERTAS --}}
+    {{-- ALERTAS DE SUCESSO OU ERRO --}}
     @if (session('success'))
         <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#00A859] text-green-700 rounded-r-xl shadow-sm font-bold flex items-center">
             <span class="mr-3">✅</span> {{ session('success') }}
         </div>
     @endif
 
-    {{-- TABELA --}}
+    @if (session('error'))
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl shadow-sm font-bold flex items-center">
+            <span class="mr-3">⚠️</span> {{ session('error') }}
+        </div>
+    @endif
+
+    {{-- TABELA DE MATERIAIS --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -46,13 +52,18 @@
                                 {{ $carga->unidade_medida }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-slate-500 text-sm italic">{{ $carga->descricao ?? 'Sem descrição' }}</td>
+                        <td class="px-6 py-4 text-slate-500 text-sm italic">
+                            {{ $carga->descricao ?? 'Sem descrição informada' }}
+                        </td>
                         <td class="px-6 py-4 text-right space-x-3">
-                            <a href="{{ route('cargas.edit', $carga->id) }}" class="text-[#0046AD] hover:text-blue-800 font-bold text-sm">Editar</a>
+                            {{-- BOTÃO EDITAR --}}
+                            <a href="{{ route('cargas.edit', $carga->id) }}" class="text-[#0046AD] hover:text-blue-800 font-bold text-sm transition-colors">Editar</a>
                             
+                            {{-- FORMULÁRIO EXCLUIR --}}
                             <form action="{{ route('cargas.destroy', $carga->id) }}" method="POST" class="inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm" onclick="return confirm('Excluir este material?')">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm transition-colors" onclick="return confirm('Tem certeza que deseja excluir este material? Isso pode afetar agendamentos vinculados.')">
                                     Excluir
                                 </button>
                             </form>
@@ -61,7 +72,7 @@
                 @empty
                     <tr>
                         <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">
-                            Nenhum material cadastrado no sistema.
+                            Nenhum material cadastrado no sistema. Clique em "Novo Material" para começar.
                         </td>
                     </tr>
                 @endforelse
@@ -69,6 +80,7 @@
         </table>
     </div>
 
+    {{-- PAGINAÇÃO --}}
     <div class="mt-6">
         {{ $cargas->links() }}
     </div>

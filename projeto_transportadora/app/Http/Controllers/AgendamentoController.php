@@ -6,27 +6,28 @@ use Illuminate\Http\Request;
 use App\Models\Agendamento;
 use App\Models\Veiculo;
 use App\Models\Motorista;
-use App\Models\VagasPatio;
 use App\Models\Carga;
+use App\Models\Ocorrencia;
+use App\Models\VagasPatio; 
+use Illuminate\Support\Facades\DB;
 
 class AgendamentoController extends Controller
 {
     public function index()
     {
-        // Carrega os agendamentos com os relacionamentos para a tabela ficar completa
-        $agendamentos = Agendamento::with(['veiculo', 'motorista', 'vaga.area'])->get();
+        $agendamentos = Agendamento::with(['veiculo', 'motorista', 'carga', 'vaga'])
+            ->orderBy('data_agendamento', 'asc')
+            ->paginate(10);
+
         return view('agendamentos.index', compact('agendamentos'));
     }
 
     public function create()
     {
-        // Busca os dados dos cadastros base (F_B01, F_B02, F_B03, F_B07)
         $veiculos = Veiculo::all();
         $motoristas = Motorista::all();
         $cargas = Carga::all();
-        
-        // Carrega as vagas e suas respectivas áreas para o select
-        $vagas = VagasPatio::with('area')->get();
+        $vagas = VagasPatio::all(); 
 
         return view('agendamentos.create', compact('veiculos', 'motoristas', 'cargas', 'vagas'));
     }
@@ -36,30 +37,91 @@ class AgendamentoController extends Controller
         $request->validate([
             'veiculo_id' => 'required',
             'motorista_id' => 'required',
-            'vaga_id' => 'required',
+            'carga_id' => 'required',
+            'vaga_id' => 'required', 
             'data_agendamento' => 'required|date',
-            'horario_inicio' => 'required',
-            'horario_fim' => 'required|after:horario_inicio',
+            'horario_inicio' => 'required', // Adicionado
+            'horario_fim' => 'required',    // Adicionado
         ]);
 
-        // REGRA DE NEGÓCIO F_F01: Controlar conflitos e sobreposição
-        $conflito = Agendamento::where('vaga_id', $request->vaga_id)
-            ->where('data_agendamento', $request->data_agendamento)
-            ->where(function ($query) use ($request) {
-                $query->whereBetween('horario_inicio', [$request->horario_inicio, $request->horario_fim])
-                      ->orWhereBetween('horario_fim', [$request->horario_inicio, $request->horario_fim])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('horario_inicio', '<=', $request->horario_inicio)
-                            ->where('horario_fim', '>=', $request->horario_fim);
-                      });
-            })->exists();
+        $veiculo = Veiculo::findOrFail($request->veiculo_id);
+        $motorista = Motorista::findOrFail($request->motorista_id);
 
-        if ($conflito) {
-            return back()->withErrors(['vaga_id' => 'Esta vaga já possui um agendamento para este período.'])->withInput();
+        // --- TRAVA DE VEÍCULO ---
+        $statusVeiculo = trim(strtolower($veiculo->status_acesso));
+
+        if ($statusVeiculo !== 'ativo') {
+            $statusAtual = $veiculo->status_acesso ?: 'Sem Status';
+            
+            Ocorrencia::create([
+                'tipo' => 'nao_conformidade',
+                'descricao' => "BLOQUEIO F_F01: Veículo {$veiculo->placa} negado. Status: {$statusAtual}.",
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error_bloqueio', "🚫 O veículo {$veiculo->placa} não pode ser agendado pois está com status: {$statusAtual}.");
         }
 
-        Agendamento::create($request->all());
+        // --- TRAVA DE MOTORISTA ---
+        // IMPORTANTE: Se no banco for 'status_acesso', mude de $motorista->status para $motorista->status_acesso
+        $statusMotorista = trim(strtolower($motorista->status));
 
-        return redirect()->route('agendamentos.index')->with('sucesso', 'Agendamento realizado com sucesso!');
+        if ($statusMotorista !== 'ativo') {
+            $statusMot = $motorista->status ?: 'Sem Status';
+
+            Ocorrencia::create([
+                'tipo' => 'nao_conformidade',
+                'descricao' => "BLOQUEIO F_F01: Motorista {$motorista->nome} negado. Status: {$statusMot}.",
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error_bloqueio', "🚫 O motorista {$motorista->nome} está {$statusMot}. Agendamento não permitido.");
+        }
+
+        // SALVAMENTO (Incluindo os horários que vêm da sua View)
+        Agendamento::create([
+            'veiculo_id' => $request->veiculo_id,
+            'motorista_id' => $request->motorista_id,
+            'carga_id' => $request->carga_id,
+            'vaga_id' => $request->vaga_id,
+            'data_agendamento' => $request->data_agendamento,
+            'horario_inicio' => $request->horario_inicio, // Adicionado
+            'horario_fim' => $request->horario_fim,       // Adicionado
+            'status' => 'pendente'
+        ]);
+
+        return redirect()->route('agendamentos.index')
+            ->with('success', 'Agendamento realizado com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $agendamento = Agendamento::findOrFail($id);
+        $veiculos = Veiculo::all();
+        $motoristas = Motorista::all();
+        $cargas = Carga::all();
+        $vagas = VagasPatio::all();
+
+        return view('agendamentos.edit', compact('agendamento', 'veiculos', 'motoristas', 'cargas', 'vagas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $agendamento = Agendamento::findOrFail($id);
+        $agendamento->update($request->all());
+
+        return redirect()->route('agendamentos.index')
+            ->with('success', 'Agendamento atualizado!');
+    }
+
+    public function destroy($id)
+    {
+        $agendamento = Agendamento::findOrFail($id);
+        $agendamento->delete();
+
+        return redirect()->route('agendamentos.index')
+            ->with('success', 'Agendamento removido.');
     }
 }

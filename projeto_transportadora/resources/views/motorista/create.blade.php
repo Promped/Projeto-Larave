@@ -27,24 +27,26 @@
             @enderror
         </div>
 
-        <div>
-            <label for="cpf" class="block text-gray-700 text-sm font-bold mb-2">CPF</label>
-            <input type="text" id="cpf" name="cpf" 
-                   class="w-full px-3 py-2 border rounded-lg @error('cpf') border-red-500 @enderror"
-                   value="{{ old('cpf') }}" required>
-            @error('cpf')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="cpf" class="block text-gray-700 text-sm font-bold mb-2">CPF</label>
+                <input type="text" id="cpf" name="cpf" 
+                       class="w-full px-3 py-2 border rounded-lg @error('cpf') border-red-500 @enderror"
+                       value="{{ old('cpf') }}" required>
+                @error('cpf')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-        <div>
-            <label for="cnh" class="block text-gray-700 text-sm font-bold mb-2">CNH</label>
-            <input type="text" id="cnh" name="cnh" 
-                   class="w-full px-3 py-2 border rounded-lg @error('cnh') border-red-500 @enderror"
-                   value="{{ old('cnh') }}" required>
-            @error('cnh')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+            <div>
+                <label for="cnh" class="block text-gray-700 text-sm font-bold mb-2">CNH</label>
+                <input type="text" id="cnh" name="cnh" 
+                       class="w-full px-3 py-2 border rounded-lg @error('cnh') border-red-500 @enderror"
+                       value="{{ old('cnh') }}" required>
+                @error('cnh')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
 
         <div>
@@ -74,7 +76,24 @@
             @enderror
         </div>
 
-        <div class="flex justify-end mt-6">
+        <!-- CAMPO DE STATUS ADICIONADO AQUI -->
+        <div>
+            <label for="status" class="block text-gray-700 text-sm font-bold mb-2">Status de Acesso</label>
+            <select id="status" name="status" 
+                    class="w-full px-3 py-2 border rounded-lg @error('status') border-red-500 @enderror" required>
+                <option value="Ativo" {{ old('status') == 'Ativo' ? 'selected' : '' }}>Ativo (Liberado)</option>
+                <option value="Bloqueado" {{ old('status') == 'Bloqueado' ? 'selected' : '' }}>Bloqueado (Negar Agendamento)</option>
+                <option value="Inativo" {{ old('status') == 'Inativo' ? 'selected' : '' }}>Inativo</option>
+            </select>
+            @error('status')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="flex justify-end mt-6 space-x-3">
+            <a href="{{ route('motoristas.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Cancelar
+            </a>
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Cadastrar Motorista
             </button>

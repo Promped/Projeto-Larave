@@ -27,6 +27,11 @@ return new class extends Migration
             if (!Schema::hasColumn('motoristas', 'deleted_at')) {
                 $table->softDeletes();
             }
+            if (!Schema::hasColumn('motoristas', 'status')) {
+                // Definimos 'Ativo' como padrão para que todos os motoristas atuais 
+                // já fiquem liberados assim que você rodar o comando.
+                $table->string('status')->default('Ativo')->after('telefone');
+            }
         });
     }
 
@@ -52,6 +57,9 @@ return new class extends Migration
             }
             if (Schema::hasColumn('motoristas', 'deleted_at')) {
                 $table->dropColumn('deleted_at');
+            }
+            if (Schema::hasColumn('motoristas', 'status')) {
+                $table->dropColumn('status');
             }
         });
     }
