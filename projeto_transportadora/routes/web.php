@@ -90,9 +90,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/ocorrencias', [RelatorioController::class, 'ocorrencias'])->name('patio.ocorrencia');
         });
 
-        // --- TICKET DE SAÍDA (AÇÃO DIRETA DO DASHBOARD) ---
-        // Basta esta rota para o seu botão de buscar funcionar e já abrir o PDF
-        Route::get('/ticket/buscar-cpf', [TicketController::class, 'buscar'])->name('ticket.buscar.cpf');
+        // --- TICKET DE SAÍDA ---
+Route::prefix('ticket')->group(function () {
+    // Aceita GET e POST para não dar mais erro 405
+    Route::match(['get', 'post'], '/gerar/{id}', [TicketController::class, 'buscar'])->name('ticket.gerar');
+    
+    Route::get('/validar/{id}', [TicketController::class, 'validar'])->name('ticket.validar.view');
+    Route::get('/buscar-cpf', [TicketController::class, 'buscar'])->name('ticket.buscar.cpf');
+});
 
     });
 

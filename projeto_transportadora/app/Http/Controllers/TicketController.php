@@ -8,19 +8,16 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class TicketController extends Controller
 {
-    /**
-     * BUSCA E GERA O PDF DIRETO
-     */
     public function buscar(Request $request)
     {
-        // 1. Limpa o CPF do input
+        // 1. Limpa o CPF
         $cpfBusca = preg_replace('/[^0-9]/', '', $request->busca);
 
         if (empty($cpfBusca)) {
-            return back()->with('error', 'Digite um CPF para buscar.');
+            return back()->with('error', 'Digite um CPF válido.');
         }
 
-        // 2. Busca o agendamento mais recente (independente de status para garantir que ache)
+        // 2. Busca o agendamento (Garante que pega o último agendado para esse CPF)
         $agendamento = Agendamento::with(['motorista', 'veiculo', 'carga'])
             ->whereHas('motorista', function($q) use ($cpfBusca) {
                 $q->whereRaw("REPLACE(REPLACE(cpf, '.', ''), '-', '') = ?", [$cpfBusca]);
@@ -28,22 +25,20 @@ class TicketController extends Controller
             ->latest()
             ->first();
 
-        // 3. Se não achar, volta com erro
         if (!$agendamento) {
-            return back()->with('error', 'Nenhum registro encontrado para o CPF: ' . $request->busca);
+            return back()->with('error', 'Nenhum agendamento encontrado para este CPF.');
         }
 
-        // 4. GERA O PDF NA HORA E EXIBE NO NAVEGADOR
-        // Certifique-se que o arquivo está em: resources/views/tickets/pdf.blade.php
+        // 3. GERA O PDF DIRETO (Usa a view tickets.pdf)
         $pdf = Pdf::loadView('tickets.pdf', compact('agendamento'));
         
-        $nomeArquivo = "comprovante_" . ($agendamento->veiculo->placa ?? 'saida') . ".pdf";
-
-        return $pdf->stream($nomeArquivo);
+        return $pdf->stream("ticket_saida_{$agendamento->veiculo->placa}.pdf");
     }
 
-    // Estas funções abaixo agora são inúteis para o seu fluxo atual, 
-    // mas pode deixar aí ou apagar se quiser limpar o código.
-    public function showValidar($id) { return redirect()->route('admin.dashboard'); }
-    public function gerarTicket(Request $request, $id) { return redirect()->route('admin.dashboard'); }
+    // Mantemos essa caso você queira apenas visualizar a tela antes de gerar
+    public function validar($id)
+    {
+        $agendamento = Agendamento::with(['motorista', 'veiculo', 'carga'])->findOrFail($id);
+        return view('tickets.validar', compact('agendamento'));
+    }
 }
