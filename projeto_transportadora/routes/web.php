@@ -19,7 +19,6 @@ use App\Http\Controllers\{
     LiberacaoController,
     TicketController,
     MovimentacaoPatioController
-    
 };
 use App\Http\Middleware\NivelAdmMiddleware;
 use App\Http\Middleware\NivelCliMiddleware;
@@ -32,6 +31,8 @@ Route::get('/', function () {
 // Rotas públicas de autenticação
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
+// Cadastro
 Route::get('/cadastro', [AuthController::class, 'showFormCadastro'])->name('cadastro');
 Route::post('/cadastro', [AuthController::class, 'cadastrarUsuario']);
 
@@ -43,16 +44,16 @@ Route::middleware('auth')->group(function () {
         return view('inicial');
     })->name('inicial');
 
-    // Área do administrador
+    // Área do administrador (Nível 1)
     Route::middleware([NivelAdmMiddleware::class])->group(function () {
-        Route::resource('veiculos', VeiculoController::class);
-        Route::resource('clientes', ClienteController::class);
         
-        // DASHBOARD
+        // --- DASHBOARD ---
         Route::get('/inicial-adm', [CargaController::class, 'index'])->name('inicial-adm');
         Route::get('/meu-painel', [CargaController::class, 'index'])->name('admin.dashboard');
 
-        // --- CADASTROS BASE (F_B) ---
+        // --- RECURSOS BÁSICOS (CADASTROS) ---
+        Route::resource('veiculos', VeiculoController::class);
+        Route::resource('clientes', ClienteController::class);
         Route::resource('funcaovisitantes', FuncaoVisitanteController::class); 
         Route::resource('transportadoras', TransportadoraController::class);
         Route::resource('motoristas', MotoristasController::class);
@@ -63,52 +64,39 @@ Route::middleware('auth')->group(function () {
         // --- OPERAÇÃO DE PÁTIO (F_F) ---
         Route::prefix('patio')->group(function () {
             Route::resource('agendamentos', AgendamentoController::class);
-
-            // F_F03: Entrada/Saída
             Route::patch('movimentacoes/{id}/sair', [MovimentacaoPatioController::class, 'registrarSaida'])->name('movimentacoes.sair');
             Route::resource('movimentacoes', MovimentacaoPatioController::class);
-
-            // F_F04: Ocorrências (APENAS O POST PARA SALVAR AQUI)
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
         });
-                    // --- F_F05: CONFERÊNCIA E LIBERAÇÃO ---
-            Route::prefix('liberacao')->group(function () {
-                // Lista veículos que saíram da doca e aguardam conferência na portaria
-                Route::get('/pendentes', [LiberacaoController::class, 'index'])->name('liberacao.index');
-                
-                // Tela de check-list (Passo 1 e 2 do seu diagrama)
-                Route::get('/conferir/{id}', [LiberacaoController::class, 'show'])->name('liberacao.show');
-                
-                // Processa a validação e registra (Passo 5 e 6 do seu diagrama)
-                Route::post('/confirmar/{id}', [LiberacaoController::class, 'store'])->name('liberacao.store');
-                
-                // Exibe o comprovante digital (Passo 8 do seu diagrama)
-                Route::get('/comprovante/{id}', [LiberacaoController::class, 'comprovante'])->name('liberacao.comprovante');
-            });
+
+        // --- F_F05: CONFERÊNCIA E LIBERAÇÃO ---
+        Route::prefix('liberacao')->group(function () {
+            Route::get('/pendentes', [LiberacaoController::class, 'index'])->name('liberacao.index');
+            Route::get('/conferir/{id}', [LiberacaoController::class, 'show'])->name('liberacao.show');
+            Route::post('/confirmar/{id}', [LiberacaoController::class, 'store'])->name('liberacao.store');
+            Route::get('/comprovante/{id}', [LiberacaoController::class, 'comprovante'])->name('liberacao.comprovante');
+        });
         
-            // --- PRODUÇÃO & ESTOQUE (F_F) ---
+        // --- PRODUÇÃO & ESTOQUE ---
         Route::resource('estoque', EstoqueController::class); 
         Route::resource('producao', ProducaoController::class); 
         Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
 
-        // --- RELATÓRIOS E SAÍDAS (F_S) ---
+        // --- RELATÓRIOS ---
         Route::prefix('relatorios')->group(function () {
             Route::get('/gerencial', [RelatorioController::class, 'gerencial'])->name('relatorios.gerencial'); 
             Route::get('/historico', [RelatorioController::class, 'historico'])->name('relatorios.historico'); 
             Route::get('/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');  
-
-            // ESTA ROTA ABAIXO É A QUE ATENDE SIDEBAR E BOTÃO "VER DETALHES"
             Route::get('/ocorrencias', [RelatorioController::class, 'ocorrencias'])->name('patio.ocorrencia');
         });
-        // Rota pública que o motorista acessa pelo link do WhatsApp
-Route::get('/ticket/validar/{id}', [TicketController::class, 'showValidar'])->name('ticket.validar.view');
 
-// Rota que processa o CPF e gera o PDF
-Route::post('/ticket/gerar/{id}', [TicketController::class, 'gerarTicket'])->name('ticket.gerar');
+        // --- TICKET DE SAÍDA (AÇÃO DIRETA DO DASHBOARD) ---
+        // Basta esta rota para o seu botão de buscar funcionar e já abrir o PDF
+        Route::get('/ticket/buscar-cpf', [TicketController::class, 'buscar'])->name('ticket.buscar.cpf');
 
     });
 
-    // Área do cliente
+    // Área do cliente (Nível 2)
     Route::middleware([NivelCliMiddleware::class])->group(function () {
         Route::get('/inicial-cli', function () {
             return view('inicial-cli');

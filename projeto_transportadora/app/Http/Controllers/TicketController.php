@@ -4,43 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf; // Importante: certifique-se de ter instalado o barryvdh/laravel-dompdf
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TicketController extends Controller
 {
-    // Mostra a tela para o motorista digitar o CPF (Na mesma página)
-    public function showValidar($id)
+    /**
+     * BUSCA E GERA O PDF DIRETO
+     */
+    public function buscar(Request $request)
     {
-        $agendamento = Agendamento::with(['motorista', 'veiculo'])->findOrFail($id);
-        return view('tickets.validar', compact('agendamento'));
-    }
+        // 1. Limpa o CPF do input
+        $cpfBusca = preg_replace('/[^0-9]/', '', $request->busca);
 
-    // Lógica para validar CPF e gerar o PDF real
-    public function gerarTicket(Request $request, $id)
-    {
-        $agendamento = Agendamento::with(['motorista', 'veiculo', 'carga'])->findOrFail($id);
-        
-        // Limpa a formatação do CPF para comparar apenas números
-        $cpfInput = preg_replace('/[^0-9]/', '', $request->cpf);
-        $cpfMotorista = preg_replace('/[^0-9]/', '', $agendamento->motorista->cpf);
+        if (empty($cpfBusca)) {
+            return back()->with('error', 'Digite um CPF para buscar.');
+        }
 
-        // Validação de segurança
-        // Se o CPF for DIFERENTE, barramos
-            if ($cpfInput !== $cpfMotorista) {
-                return back()->with('error', 'O CPF digitado não confere com o motorista deste veículo.');
-            }
+        // 2. Busca o agendamento mais recente (independente de status para garantir que ache)
+        $agendamento = Agendamento::with(['motorista', 'veiculo', 'carga'])
+            ->whereHas('motorista', function($q) use ($cpfBusca) {
+                $q->whereRaw("REPLACE(REPLACE(cpf, '.', ''), '-', '') = ?", [$cpfBusca]);
+            })
+            ->latest()
+            ->first();
 
-            // Se chegou aqui, é porque o CPF é IGUAL. Então geramos o PDF:
-            $pdf = Pdf::loadView('tickets.pdf', compact('agendamento'));
-            return $pdf->stream('ticket.pdf');
+        // 3. Se não achar, volta com erro
+        if (!$agendamento) {
+            return back()->with('error', 'Nenhum registro encontrado para o CPF: ' . $request->busca);
+        }
 
-        // Gera o PDF usando a view tickets.pdf
+        // 4. GERA O PDF NA HORA E EXIBE NO NAVEGADOR
+        // Certifique-se que o arquivo está em: resources/views/tickets/pdf.blade.php
         $pdf = Pdf::loadView('tickets.pdf', compact('agendamento'));
+        
+        $nomeArquivo = "comprovante_" . ($agendamento->veiculo->placa ?? 'saida') . ".pdf";
 
-        // Nome do arquivo: ticket_PLACA_HORA.pdf
-        $nomeArquivo = "ticket_" . ($agendamento->veiculo->placa ?? 'sem_placa') . "_" . now()->format('Hi') . ".pdf";
-
-        // .stream() abre no navegador, .download() baixa direto
         return $pdf->stream($nomeArquivo);
     }
+
+    // Estas funções abaixo agora são inúteis para o seu fluxo atual, 
+    // mas pode deixar aí ou apagar se quiser limpar o código.
+    public function showValidar($id) { return redirect()->route('admin.dashboard'); }
+    public function gerarTicket(Request $request, $id) { return redirect()->route('admin.dashboard'); }
 }
