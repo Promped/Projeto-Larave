@@ -16,7 +16,10 @@ use App\Http\Controllers\{
     RelatorioController,
     ProducaoController,
     EstoqueController,
+    LiberacaoController,
+    TicketController,
     MovimentacaoPatioController
+    
 };
 use App\Http\Middleware\NivelAdmMiddleware;
 use App\Http\Middleware\NivelCliMiddleware;
@@ -68,8 +71,22 @@ Route::middleware('auth')->group(function () {
             // F_F04: Ocorrências (APENAS O POST PARA SALVAR AQUI)
             Route::post('/ocorrencia', [GerenciamentoPatioController::class, 'storeOcorrencia'])->name('patio.ocorrencia.store');
         });
-
-        // --- PRODUÇÃO & ESTOQUE (F_F) ---
+                    // --- F_F05: CONFERÊNCIA E LIBERAÇÃO ---
+            Route::prefix('liberacao')->group(function () {
+                // Lista veículos que saíram da doca e aguardam conferência na portaria
+                Route::get('/pendentes', [LiberacaoController::class, 'index'])->name('liberacao.index');
+                
+                // Tela de check-list (Passo 1 e 2 do seu diagrama)
+                Route::get('/conferir/{id}', [LiberacaoController::class, 'show'])->name('liberacao.show');
+                
+                // Processa a validação e registra (Passo 5 e 6 do seu diagrama)
+                Route::post('/confirmar/{id}', [LiberacaoController::class, 'store'])->name('liberacao.store');
+                
+                // Exibe o comprovante digital (Passo 8 do seu diagrama)
+                Route::get('/comprovante/{id}', [LiberacaoController::class, 'comprovante'])->name('liberacao.comprovante');
+            });
+        
+            // --- PRODUÇÃO & ESTOQUE (F_F) ---
         Route::resource('estoque', EstoqueController::class); 
         Route::resource('producao', ProducaoController::class); 
         Route::post('/producao/baixar', [ProducaoController::class, 'baixarEstoque'])->name('producao.baixar');
@@ -83,6 +100,11 @@ Route::middleware('auth')->group(function () {
             // ESTA ROTA ABAIXO É A QUE ATENDE SIDEBAR E BOTÃO "VER DETALHES"
             Route::get('/ocorrencias', [RelatorioController::class, 'ocorrencias'])->name('patio.ocorrencia');
         });
+        // Rota pública que o motorista acessa pelo link do WhatsApp
+Route::get('/ticket/validar/{id}', [TicketController::class, 'showValidar'])->name('ticket.validar.view');
+
+// Rota que processa o CPF e gera o PDF
+Route::post('/ticket/gerar/{id}', [TicketController::class, 'gerarTicket'])->name('ticket.gerar');
 
     });
 

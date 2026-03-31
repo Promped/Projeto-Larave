@@ -4,6 +4,7 @@
 <div class="container mx-auto p-6">
     <h2 class="text-2xl font-bold mb-6 text-blue-800 border-b-2 border-blue-200">📊 F_S01: Relatórios Gerenciais</h2>
 
+    {{-- Alerta de Ocorrências --}}
     @if($ocorrencias > 0)
     <div class="bg-red-600 text-white p-4 rounded-lg shadow-lg mb-8 animate-pulse flex justify-between items-center">
         <div>
@@ -15,6 +16,7 @@
     </div>
     @endif
 
+    {{-- Cards de Indicadores --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-blue-100 p-6 rounded-lg shadow border-l-8 border-blue-500">
             <h3 class="text-blue-700 font-bold uppercase text-sm">Total de Agendamentos</h3>
@@ -37,20 +39,50 @@
         </div>
     </div>
 
+    {{-- Lista de Movimentações --}}
     <div class="bg-white p-6 rounded-lg shadow">
         <h3 class="text-lg font-bold mb-4 text-gray-700">Últimas Movimentações (Histórico Rápido)</h3>
         <ul class="divide-y divide-gray-200">
             @forelse($ultimosAgendamentos as $agendamento)
-            <li class="py-3 flex justify-between items-center">
+            <li class="py-4 flex justify-between items-center hover:bg-gray-50 transition px-2 rounded">
                 <div class="flex flex-col">
                     <span class="text-sm font-bold text-gray-900">Veículo: {{ $agendamento->veiculo->placa ?? 'N/A' }}</span>
-                    <span class="text-xs text-gray-400">Motorista: {{ $agendamento->motorista->nome ?? 'N/A' }}</span>
+                    <span class="text-xs text-gray-600">Motorista: {{ $agendamento->motorista->nome ?? 'N/A' }}</span>
+                    <span class="text-[10px] text-gray-400 uppercase font-semibold">Carga: {{ $agendamento->carga->tipo ?? 'N/A' }}</span>
                 </div>
-                <div class="text-right">
-                    <span class="text-xs text-gray-500 block mb-1">{{ $agendamento->created_at->diffForHumans() }}</span>
-                    <span class="px-2 py-1 text-xs rounded font-bold {{ $agendamento->status == 'pendente' ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800' }}">
-                        {{ ucfirst($agendamento->status) }}
-                    </span>
+
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <span class="text-xs text-gray-500 block mb-1">{{ $agendamento->created_at->diffForHumans() }}</span>
+                        
+                        @php
+                            $statusClasses = [
+                                'pendente' => 'bg-yellow-100 text-yellow-800 border border-yellow-300',
+                                'No Pátio' => 'bg-blue-100 text-blue-800 border border-blue-300',
+                                'concluido' => 'bg-green-600 text-white shadow-sm',
+                                'cancelado' => 'bg-red-100 text-red-800'
+                            ];
+                            $classe = $statusClasses[$agendamento->status] ?? 'bg-gray-100 text-gray-800';
+                        @endphp
+
+                        <span class="px-3 py-1 text-xs rounded-full font-bold {{ $classe }}">
+                            {{ $agendamento->status == 'concluido' ? '✅ Finalizado' : ucfirst($agendamento->status) }}
+                        </span>
+                    </div>
+
+                    {{-- Botão TICKET: Removido target="_blank" para abrir na mesma aba --}}
+                    <div class="w-24 flex justify-end">
+                        @if($agendamento->status == 'concluido')
+                            <a href="{{ route('ticket.validar.view', $agendamento->id) }}" 
+                               class="flex items-center gap-2 bg-gray-800 hover:bg-black text-white px-3 py-2 rounded text-xs font-bold transition shadow hover:shadow-lg">
+                                <i class="fas fa-file-invoice"></i> TICKET
+                            </a>
+                        @else
+                            <button disabled class="opacity-30 cursor-not-allowed flex items-center gap-2 bg-gray-300 text-gray-600 px-3 py-2 rounded text-xs font-bold">
+                                <i class="fas fa-lock"></i> TICKET
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </li>
             @empty

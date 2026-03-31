@@ -30,7 +30,7 @@
                             if($item->status == 'Em Espera') $cor = 'bg-yellow-200 text-yellow-700';
                             if($item->status == 'Em Descarga') $cor = 'bg-blue-200 text-blue-700';
                             if($item->status == 'Finalizado') $cor = 'bg-green-200 text-green-700';
-                            if($item->status == 'Saída Realizada') $cor = 'bg-red-200 text-red-700';
+                            if($item->status == 'Saída Realizada Doca') $cor = 'bg-red-200 text-red-700';
                         @endphp
                         <span class="{{ $cor }} py-1 px-3 rounded-full text-xs font-bold">
                             {{ $item->status }}

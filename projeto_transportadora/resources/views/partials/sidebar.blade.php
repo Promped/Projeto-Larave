@@ -35,9 +35,10 @@
             </a>
 
             {{-- F_F05 --}}
-            <a href="javascript:void(0)" onclick="aviso('F_F05')" class="px-4 py-2.5 rounded-lg text-sm flex items-center text-white/40 hover:bg-white/5 italic">
-                <span class="mr-3 text-base opacity-40">✅</span> F_F05: Liberação
-            </a>
+                <a href="{{ route('liberacao.index') }}" 
+                    class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('liberacao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">✅</span> F_F05: Liberação Final
+                </a>
 
             {{-- PRODUÇÃO & ESTOQUE --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">

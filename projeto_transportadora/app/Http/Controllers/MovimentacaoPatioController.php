@@ -14,9 +14,10 @@ class MovimentacaoPatioController extends Controller
     // 1. LISTAGEM (Mostra apenas quem está dentro do pátio operando)
     public function index()
     {
-        $movimentacoes = MovimentacaoPatio::with('agendamento.veiculo', 'agendamento.motorista', 'agendamento.carga')
-            ->whereNotIn('status', ['Saída Realizada', 'Concluído']) 
-            ->get();
+        // No index do MovimentacaoPatioController
+            $movimentacoes = MovimentacaoPatio::with('agendamento.veiculo', 'agendamento.motorista', 'agendamento.carga')
+                ->whereNotIn('status', ['Finalizado', 'Saída Realizada', 'Concluído']) 
+                ->get();
 
         return view('movimentacoes.index', compact('movimentacoes'));
     }
