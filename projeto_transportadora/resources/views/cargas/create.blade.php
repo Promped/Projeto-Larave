@@ -1,60 +1,61 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novo Material - Sistema Logístico</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 class="text-xl font-bold italic">Gerenciamento 🚚</h1>
-        <div class="flex items-center gap-4"><span>Olá, {{ auth()->user()->name ?? 'Admin' }}</span></div>
-    </header>
+@extends('layout')
 
-    <div class="flex">
-        <aside class="w-64 min-h-screen bg-white shadow-md">
-            {{-- Garanta que este arquivo existe em views/partials/sidebar.blade.php --}}
-            @include('partials.sidebar')
-        </aside>
-
-        <main class="flex-1 p-8">
-            <div class="bg-white shadow rounded p-6 max-w-2xl mx-auto border-t-4 border-blue-600">
-                <h2 class="text-xl font-bold mb-6 text-gray-800">📦 Novo Cadastro de Material</h2>
-
-                {{-- A rota cargas.store deve estar definida no seu web.php --}}
-                <form action="{{ route('cargas.store') }}" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 italic">Nome do Material / Tipo de Carga*</label>
-                        <input type="text" name="tipo" placeholder="Ex: Madeira Pinus" required 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border focus:ring-blue-500">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Unidade de Medida Padrão</label>
-                        <select name="unidade_medida" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                            {{-- Valores em maiúsculo para bater com os seus testes anteriores --}}
-                            <option value="TON">Toneladas (ton)</option>
-                            <option value="KG">Quilos (kg)</option>
-                            <option value="M3">Metros Cúbicos (m³)</option>
-                            <option value="UN">Unidades (un)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Descrição Técnica</label>
-                        <textarea name="descricao" rows="3" placeholder="Informações adicionais..." 
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border"></textarea>
-                    </div>
-
-                    <div class="flex justify-end gap-2 pt-4 border-t">
-                        <a href="{{ route('cargas.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cancelar</a>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-md">Salvar Cadastro</button>
-                    </div>
-                </form>
+@section('content')
+<div class="flex-1 p-8 bg-gray-50 min-h-screen">
+    <div class="bg-white shadow-2xl rounded-3xl p-8 max-w-2xl mx-auto border-t-8 border-blue-600 animate-fade-in">
+        
+        <div class="flex items-center gap-4 mb-8">
+            <span class="text-4xl">📦</span>
+            <div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Novo Material</h2>
+                <p class="text-xs font-bold text-gray-400 uppercase">Cadastro de Tipos de Carga para Operação</p>
             </div>
-        </main>
+        </div>
+
+        <form action="{{ route('cargas.store') }}" method="POST" class="space-y-6">
+            @csrf
+            
+            <div>
+                <label class="block text-[10px] font-black text-blue-600 uppercase mb-2 tracking-widest">Nome do Material / Tipo de Carga*</label>
+                <input type="text" name="tipo" placeholder="Ex: Madeira Pinus" required 
+                       class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-5 text-slate-800 font-bold focus:border-blue-500 focus:bg-white outline-none transition-all shadow-inner">
+            </div>
+            
+            <div>
+                <label class="block text-[10px] font-black text-blue-600 uppercase mb-2 tracking-widest">Unidade de Medida Padrão</label>
+                <select name="unidade_medida" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-5 text-slate-800 font-bold focus:border-blue-500 focus:bg-white outline-none transition-all cursor-pointer">
+                    <option value="TON">Toneladas (ton)</option>
+                    <option value="KG">Quilos (kg)</option>
+                    <option value="M3">Metros Cúbicos (m³)</option>
+                    <option value="UN">Unidades (un)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black text-blue-600 uppercase mb-2 tracking-widest">Descrição Técnica</label>
+                <textarea name="descricao" rows="3" placeholder="Informações adicionais sobre o manuseio ou armazenamento..." 
+                          class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl py-4 px-5 text-slate-800 font-bold focus:border-blue-500 focus:bg-white outline-none transition-all shadow-inner"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-4 pt-6 border-t border-slate-100">
+                <a href="{{ route('cargas.index') }}" 
+                   class="px-8 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase hover:bg-slate-200 transition-all">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase hover:bg-blue-700 shadow-lg shadow-blue-200 active:scale-95 transition-all">
+                    Salvar Cadastro
+                </button>
+            </div>
+        </form>
     </div>
-</body>
-</html>
+</div>
+
+<style>
+    @keyframes fade-in { 
+        from { opacity: 0; transform: translateY(10px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+    .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+</style>
+@endsection
