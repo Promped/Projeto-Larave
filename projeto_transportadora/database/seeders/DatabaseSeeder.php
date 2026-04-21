@@ -18,8 +18,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Desativa chaves estrangeiras para permitir o TRUNCATE (limpeza total)
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        // Limpando as tabelas
+        
         User::truncate();
         Transportadora::truncate();
         Carga::truncate();
@@ -28,16 +29,19 @@ class DatabaseSeeder extends Seeder
         AreaPatio::truncate();
         VagasPatio::truncate();
         FuncaoVisitante::truncate();
+        
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // 1. USUÁRIO
+        // 1. USUÁRIO (DEIXEI ATIVO PARA VOCÊ CONSEGUIR LOGAR)
         User::create([
             'name' => 'Usuario Teste',
             'email' => 'test@example.com',
             'password' => Hash::make('12345678'),
         ]);
 
-        // 2. TRANSPORTADORAS
+        /* --- TUDO ABAIXO FOI DESATIVADO (COM BARRA) --- */
+
+        /* // 2. TRANSPORTADORAS
         $transpIds = [];
         for ($i = 1; $i <= 4; $i++) {
             $t = Transportadora::create([
@@ -50,7 +54,7 @@ class DatabaseSeeder extends Seeder
             $transpIds[] = $t->id;
         }
 
-        // 3. CARGAS (Básico para evitar erro de coluna)
+        // 3. CARGAS
         $materiais = ['Madeira', 'Ferro', 'EPI', 'Insumo'];
         foreach ($materiais as $m) {
             Carga::create([
@@ -60,7 +64,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-       // 3. MOTORISTAS (Já sabemos que é 'status')
+        // 3. MOTORISTAS
         $opcoesStatus = ['Ativo', 'Inativo', 'Bloqueado'];
         for ($i = 1; $i <= 24; $i++) {
             Motorista::create([
@@ -73,22 +77,18 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // 4. VEÍCULOS (Aqui vamos ser cautelosos)
+        // 4. VEÍCULOS
         for ($i = 1; $i <= 24; $i++) {
-            $dadosVeiculo = [
+            Veiculo::create([
                 'placa' => "BRA" . rand(1, 9) . "A" . rand(10, 99),
                 'modelo' => "Caminhão $i",
                 'tipo' => 'Carreta',
                 'transportadora_id' => $transpIds[array_rand($transpIds)],
-            ];
-
-            // TESTE: Se o erro persistir, vamos tentar 'status_acesso' apenas para veículos
-            // porque seu banco disse que 'status' não existe aqui.
-            $dadosVeiculo['status_acesso'] = 'Ativo'; 
-
-            Veiculo::create($dadosVeiculo);
+                'status_acesso' => 'Ativo',
+            ]);
         }
-        // 5. ÁREAS E VAGAS (Ajustado com os ENUMs reais)
+
+        // 5. ÁREAS E VAGAS
         for ($i = 1; $i <= 4; $i++) {
             $area = AreaPatio::create([
                 'nome' => "Pátio Setor $i",
@@ -99,28 +99,27 @@ class DatabaseSeeder extends Seeder
                 VagasPatio::create([
                     'area_id'            => $area->id,
                     'identificacao_vaga' => "Vaga $i-$v",
-                    'status'             => 'disponivel', // Tem que ser exatamente assim!
+                    'status'             => 'disponivel',
                     'veiculo_id'         => null
                 ]);
             }
         }
 
-        // --- 7. VISITANTES (Ajustado com os nomes exatos do banco) ---
-$funcoes = ['Estagiário', 'Manutenção', 'Diretoria'];
-
-foreach ($funcoes as $index => $f) {
-    FuncaoVisitante::create([
-        'nome'          => "Visitante " . ($index + 1), // Campo obrigatório
-        'descricao'     => "Registro de entrada para $f", // Campo obrigatório
-        'documento'     => "000.000.000-0" . ($index + 1),
-        'empresa'       => "Prestadora $f LTDA",
-        'funcao'        => $f,
-        'periodo'       => 'Comercial',
-        'motivo_visita' => "Serviço de $f agendado para hoje.",
-        'hora_entrada'  => '08:00:00',
-        'hora_saida'    => '18:00:00',
-        // 'area_visitada' => 1, // Se quiser ligar a uma área de pátio específica
-    ]);
-}
+        // 7. VISITANTES
+        $funcoes = ['Estagiário', 'Manutenção', 'Diretoria'];
+        foreach ($funcoes as $index => $f) {
+            FuncaoVisitante::create([
+                'nome'          => "Visitante " . ($index + 1),
+                'descricao'     => "Registro de entrada para $f",
+                'documento'     => "000.000.000-0" . ($index + 1),
+                'empresa'       => "Prestadora $f LTDA",
+                'funcao'        => $f,
+                'periodo'       => 'Comercial',
+                'motivo_visita' => "Serviço de $f agendado para hoje.",
+                'hora_entrada'  => '08:00:00',
+                'hora_saida'    => '18:00:00',
+            ]);
+        }
+        */
     }
 }
