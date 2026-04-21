@@ -55,19 +55,7 @@
                         <td class="px-6 py-4 text-slate-500 text-sm italic">
                             {{ $carga->descricao ?? 'Sem descrição informada' }}
                         </td>
-                        <td class="px-6 py-4 text-right space-x-3">
-                            {{-- BOTÃO EDITAR --}}
-                            <a href="{{ route('cargas.edit', $carga->id) }}" class="text-[#0046AD] hover:text-blue-800 font-bold text-sm transition-colors">Editar</a>
-                            
-                            {{-- FORMULÁRIO EXCLUIR --}}
-                            <form action="{{ route('cargas.destroy', $carga->id) }}" method="POST" class="inline">
-                                @csrf 
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm transition-colors" onclick="return confirm('Tem certeza que deseja excluir este material? Isso pode afetar agendamentos vinculados.')">
-                                    Excluir
-                                </button>
-                            </form>
-                        </td>
+                        
                     </tr>
                 @empty
                     <tr>

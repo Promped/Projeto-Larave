@@ -1,8 +1,9 @@
+
 <aside class="flex flex-col w-full md:w-72 bg-[#0046AD] min-h-screen text-white shadow-2xl">
     <div class="p-6">
         <h3 class="text-xl font-black mb-8 border-b border-white/10 pb-4 tracking-tighter italic">
             Logistics<span class="text-[#00A859]">Pro</span>
-        </h3>
+        </h3> 
         
         <nav class="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-120px)] pr-2 custom-scroll">
             {{-- DASHBOARD --}}
@@ -19,41 +20,44 @@
             {{-- F_F01 --}}
             <a href="{{ route('agendamentos.index') }}" 
                 class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('agendamentos.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📅</span> F_F01: Agendamentos
+                <span class="mr-3 text-base">📅</span> Agendamentos
             </a>
 
             {{-- F_F03 --}}
             <a href="{{ route('movimentacoes.index') }}" 
                 class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('movimentacoes.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">🚛</span> F_F03: Entradas / Saídas
+                <span class="mr-3 text-base">🚛</span>  Entradas / Saídas
             </a>
 
             {{-- F_F04: OCORRÊNCIAS (Apontando para a função do RelatorioController corrigida) --}}
             <a href="{{ route('patio.ocorrencia') }}" 
                 class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('patio.ocorrencia') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">⚠️</span> F_F04: Ocorrências
+                <span class="mr-3 text-base">⚠️</span>   Ocorrências
             </a>
 
             {{-- F_F05 --}}
                 <a href="{{ route('liberacao.index') }}" 
                     class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('liberacao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                    <span class="mr-3 text-base">✅</span> F_F05: Liberação Final
+                    <span class="mr-3 text-base">✅</span>   Liberação Final
                 </a>
 
             {{-- PRODUÇÃO & ESTOQUE --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
-                Produção & Estoque
+                Estoque
             </div>
             
             <a href="{{ route('estoque.index') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('estoque.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📦</span> F_F08: Estoque
+                <span class="mr-3 text-base">📦</span>   Estoque
             </a>
 
-            <a href="{{ route('producao.index') }}" 
-               class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('producao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">🛠️</span> F_F09: Produção
-            </a>
+            {{-- 
+                RETIRADO E NÃO FUNCIONANDO
+                <a href="{{ route('producao.index') }}" 
+                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('producao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">🛠️</span>  Produção
+                </a>
+            --}}
 
             {{-- CADASTROS BASE --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
@@ -61,13 +65,13 @@
             </div>
             @php
                 $cadastros = [
-                    ['r' => 'transportadoras.index', 'i' => '🏢', 'l' => 'F_B04: Fornecedores'],
-                    ['r' => 'veiculos.index', 'i' => '🚚', 'l' => 'F_B01: Veículos'],
-                    ['r' => 'motoristas.index', 'i' => '👨‍✈️', 'l' => 'F_B02: Motoristas'],
-                    ['r' => 'cargas.index', 'i' => '📦', 'l' => 'F_B03: Cargas'],
-                    ['r' => 'funcaovisitantes.index', 'i' => '🛂', 'l' => 'F_B06: Funções'],
-                    ['r' => 'areaspatio.index', 'i' => '📍', 'l' => 'F_B07: Áreas'],
-                    ['r' => 'vagas.index', 'i' => '🅿️', 'l' => 'F_B08: Vagas'],
+                    ['r' => 'transportadoras.index', 'i' => '🏢', 'l' => ' Fornecedores'],
+                    ['r' => 'veiculos.index', 'i' => '🚚', 'l' => 'Veículos'],
+                    ['r' => 'motoristas.index', 'i' => '👨‍✈️', 'l' => ' Motoristas'],
+                    ['r' => 'cargas.index', 'i' => '📦', 'l' => ' Cargas'],
+                    ['r' => 'funcaovisitantes.index', 'i' => '🛂', 'l' => 'Funções'],
+                    ['r' => 'areaspatio.index', 'i' => '📍', 'l' => ' Áreas'],
+                    ['r' => 'vagas.index', 'i' => '🅿️', 'l' => ' Vagas'],
                 ];
             @endphp
             @foreach($cadastros as $c)
@@ -84,17 +88,17 @@
             
             <a href="{{ route('relatorios.gerencial') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.gerencial') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📈</span> F_S01: Gerencial
+                <span class="mr-3 text-base">📈</span>  Gerencial
             </a>
             
             <a href="{{ route('relatorios.historico') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.historico') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📜</span> F_S02: Histórico
+                <span class="mr-3 text-base">📜</span> Histórico
             </a>
 
             <a href="{{ route('relatorios.gerencial') }}" 
                 class="mt-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center font-bold hover:bg-red-600 hover:text-white transition-all animate-pulse">
-                <span class="mr-2 text-base">🚨</span> F_S04: Alerta de Estoque
+                <span class="mr-2 text-base">🚨</span>  Alerta de Estoque
             </a>
         </nav>
     </div>

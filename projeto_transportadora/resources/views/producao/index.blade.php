@@ -1,3 +1,5 @@
+<?php
+/*
 @extends('layout') {{-- Sempre usando 'layout' conforme sua estrutura --}}
 
 @section('content')
@@ -6,11 +8,11 @@
 
     <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
         @if(session('sucesso'))
-    <div class="bg-green-500 text-white p-3 rounded mb-4">{{ session('sucesso') }}</div>
-@endif
-@if(session('erro'))
-    <div class="bg-red-500 text-white p-3 rounded mb-4">{{ session('erro') }}</div>
-@endif
+            <div class="bg-green-500 text-white p-3 rounded mb-4">{{ session('sucesso') }}</div>
+        @endif
+        @if(session('erro'))
+            <div class="bg-red-500 text-white p-3 rounded mb-4">{{ session('erro') }}</div>
+        @endif
         <form action="{{ route('producao.baixar') }}" method="POST">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -34,3 +36,5 @@
     </div>
 </div>
 @endsection
+*/
+?>
