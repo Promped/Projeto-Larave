@@ -7,7 +7,7 @@ $kernel->bootstrap();
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-$email = 'admin@example.com';
+$email = 'admin@admin.com';
 $exists = User::where('email', $email)->first();
 if ($exists) {
     echo "User already exists: {$exists->email}\n";
@@ -15,9 +15,9 @@ if ($exists) {
 }
 
 $user = User::create([
-    'name' => 'Admin',
+    'name' => 'Administrador',
     'email' => $email,
-    'password' => Hash::make('secret'),
+    'password' => Hash::make('123456'),
     'nivel' => 'ADM'
 ]);
 

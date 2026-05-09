@@ -12,7 +12,7 @@
             </h2>
             <p class="text-xs text-gray-500 font-bold uppercase mt-2 tracking-widest flex items-center gap-2">
                 <span class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></span>
-                ID: F_S01 • Gestão de Fluxo em Tempo Real • {{ now()->format('d/m/Y') }}
+                • Gestão de Fluxo em Tempo Real • {{ now()->format('d/m/Y') }}
             </p>
         </div>
         <div class="flex items-center gap-4 bg-white p-4 rounded-3xl shadow-xl border border-gray-100">

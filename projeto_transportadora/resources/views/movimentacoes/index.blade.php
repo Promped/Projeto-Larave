@@ -4,7 +4,7 @@
 <div class="container mx-auto p-6">
     <div class="flex justify-between items-center mb-6 border-b-2 border-blue-200 pb-4">
         <div>
-            <h2 class="text-2xl font-bold text-blue-800">🚚 F_F03: Controle de Fluxo de Pátio</h2>
+            <h2 class="text-2xl font-bold text-blue-800">🚚 Controle de Fluxo de Pátio</h2>
             <p class="text-sm text-gray-500">Gestão de Entradas, Descargas e Saídas</p>
         </div>
         <a href="{{ route('movimentacoes.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold shadow-md transition-all">

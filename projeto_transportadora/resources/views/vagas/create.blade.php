@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Cadastrar Nova Vaga (F_B07)</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Cadastrar Nova Vaga </h1>
         <p class="text-sm text-gray-600">Vincule uma nova vaga a uma área de pátio existente.</p>
     </div>
 

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4 text-red-700 underline">F_F04: Gestão de Ocorrências de Pátio</h2>
+    <h2 class="text-2xl font-bold mb-4 text-red-700 underline">Gestão de Ocorrências de Pátio</h2>
 
     <div class="bg-white shadow-md rounded-xl overflow-hidden">
         <table class="min-w-full">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-white shadow-md rounded-lg p-6">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Agendamentos de Carga/Descarga (F_F01)</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Agendamentos de Carga/Descarga</h1>
         <a href="{{ route('agendamentos.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 font-bold">
             Novo Agendamento
         </a>

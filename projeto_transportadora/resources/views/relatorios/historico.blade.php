@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h2 class="text-2xl font-bold mb-4 text-purple-700 underline">F_S02: Histórico de Movimentação</h2>
+    <h2 class="text-2xl font-bold mb-4 text-purple-700 underline">Histórico de Movimentação</h2>
     
     <div class="bg-white shadow-md rounded my-6 overflow-x-auto">
         <table class="min-w-full table-auto">

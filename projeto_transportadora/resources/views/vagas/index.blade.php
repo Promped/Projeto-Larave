@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-white shadow-md rounded-lg p-6">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Gestão de Vagas (F_B07)</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Gestão de Vagas </h1>
         <a href="{{ route('vagas.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
             Nova Vaga
         </a>

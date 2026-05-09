@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h2 class="text-2xl font-black text-slate-800 tracking-tighter flex items-center gap-2 italic">
-                <span class="text-[#0046AD]">F_B03:</span> Cadastro de Materiais (Cargas)
+                <span class="text-[#0046AD]"></span> Cadastro de Materiais (Cargas)
             </h2>
             <p class="text-slate-500 text-sm font-medium">Gerencie os tipos de materiais que circulam no pátio.</p>
         </div>

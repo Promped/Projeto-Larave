@@ -3,7 +3,7 @@
 @section('content')
 <div class="p-6">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-black uppercase italic text-[#0046AD]">F_F05: Liberação de Saída</h2>
+        <h2 class="text-2xl font-black uppercase italic text-[#0046AD]">Liberação de Saída</h2>
         <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Aguardando Conferência</span>
     </div>
 

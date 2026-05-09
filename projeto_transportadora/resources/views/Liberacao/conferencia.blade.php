@@ -7,7 +7,7 @@
         <div class="bg-[#0046AD] p-8 text-white">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">F_F05: Conferência Documental e Física</h2>
+                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">Conferência Documental e Física</h2>
                     <p class="text-blue-100 opacity-80">Validação final antes da saída das docas</p>
                 </div>
                 <span class="text-5xl opacity-20">🚛</span>

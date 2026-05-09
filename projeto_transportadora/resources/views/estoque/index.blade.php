@@ -5,8 +5,8 @@
     {{-- Cabeçalho com Botão de Cadastro --}}
     <div class="flex justify-between items-center mb-6 border-b-2 border-green-200 pb-4">
         <div>
-            <h2 class="text-2xl font-bold text-green-800">📦 F_F08: Controle de Estoque Central</h2>
-            <p class="text-sm text-gray-500">Monitoramento em Tempo Real (Integrado ao F_B07)</p>
+            <h2 class="text-2xl font-bold text-green-800">📦 Controle de Estoque Central</h2>
+            <p class="text-sm text-gray-500">Monitoramento em Tempo Real </p>
         </div>
         
         <div class="flex items-center gap-4">

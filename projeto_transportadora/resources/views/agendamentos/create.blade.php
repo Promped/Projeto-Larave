@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
     <div class="mb-6 border-b pb-4">
-        <h1 class="text-2xl font-bold text-gray-800">Novo Agendamento (F_F01)</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Novo Agendamento </h1>
         <p class="text-sm text-gray-600">Reserve uma janela de horário para operação de carga/descarga.</p>
     </div>
         {{-- Alerta de Bloqueio Crítico --}}
