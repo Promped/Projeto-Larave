@@ -1,55 +1,63 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Material - Sistema Logístico</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
-        <h1 class="text-xl font-bold italic">Gerenciamento 🚚</h1>
-    </header>
+@extends('layout')
 
-    <div class="flex">
-        <aside class="w-64 min-h-screen bg-white shadow-md">
-            @include('partials.sidebar')
-        </aside>
-
-        <main class="flex-1 p-8">
-            <div class="bg-white shadow rounded p-6 max-w-2xl mx-auto border-t-4 border-blue-600">
-                <h2 class="text-xl font-bold mb-6 text-gray-800">📝 Editar Material: {{ $carga->tipo }}</h2>
-
-                <form action="{{ route('cargas.update', $carga->id) }}" method="POST" class="space-y-4">
-                    @csrf
-                    @method('PUT')
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Nome / Tipo</label>
-                        <input type="text" name="tipo" value="{{ $carga->tipo }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Unidade de Medida</label>
-                        <select name="unidade_medida" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">
-                            <option value="ton" {{ $carga->unidade_medida == 'ton' ? 'selected' : '' }}>Toneladas (ton)</option>
-                            <option value="kg" {{ $carga->unidade_medida == 'kg' ? 'selected' : '' }}>Quilos (kg)</option>
-                            <option value="m3" {{ $carga->unidade_medida == 'm3' ? 'selected' : '' }}>Metros Cúbicos (m³)</option>
-                            <option value="un" {{ $carga->unidade_medida == 'un' ? 'selected' : '' }}>Unidades (un)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Descrição</label>
-                        <textarea name="descricao" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 border">{{ $carga->descricao }}</textarea>
-                    </div>
-
-                    <div class="flex justify-end gap-2 pt-4 border-t">
-                        <a href="{{ route('cargas.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">Cancelar</a>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-md">Atualizar</button>
-                    </div>
-                </form>
+@section('content')
+<div class="flex-1 p-8 bg-slate-50 min-h-screen">
+    <div class="bg-white shadow-xl rounded-3xl p-8 max-w-2xl mx-auto border-t-8 border-blue-600">
+        
+        {{-- Título e Identificação do Registro --}}
+        <div class="mb-8 border-b border-slate-100 pb-6">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-50 p-3 rounded-2xl text-2xl text-blue-600 shadow-sm">📝</div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Editar Material</h2>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Modificando dados cadastrais de: <span class="text-blue-600">{{ $carga->tipo }}</span></p>
+                </div>
             </div>
-        </main>
+        </div>
+
+        {{-- Formulário de Atualização --}}
+        <form action="{{ route('cargas.update', $carga->id) }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
+            
+            {{-- Campo: Nome / Tipo de Carga --}}
+            <div>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Nome do Material / Tipo de Carga*</label>
+                <input type="text" name="tipo" value="{{ old('tipo', $carga->tipo) }}" required 
+                       class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all">
+            </div>
+            
+            {{-- Campo: Unidade de Medida (Trazendo a opção salva selecionada) --}}
+            <div>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Unidade de Medida Padrão</label>
+                <select name="unidade_medida" required
+                        class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer">
+                    <option value="TON" {{ strtolower($carga->unidade_medida) == 'ton' ? 'selected' : '' }}>Toneladas (ton)</option>
+                    <option value="KG" {{ strtolower($carga->unidade_medida) == 'kg' ? 'selected' : '' }}>Quilos (kg)</option>
+                    <option value="M3" {{ strtolower($carga->unidade_medida) == 'm3' ? 'selected' : '' }}>Metros Cúbicos (m³)</option>
+                    <option value="UN" {{ strtolower($carga->unidade_medida) == 'un' ? 'selected' : '' }}>Unidades (un)</option>
+                </select>
+            </div>
+
+            {{-- Campo: Descrição Técnica --}}
+            <div>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Descrição Técnica / Notas</label>
+                <textarea name="descricao" rows="3" placeholder="Informações sobre manuseio ou restrições..."
+                          class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all">{{ old('descricao', $carga->descricao) }}</textarea>
+            </div>
+
+            {{-- Botões de Controle --}}
+            <div class="mt-10 flex justify-end items-center gap-4 border-t border-slate-100 pt-6">
+                <a href="{{ route('cargas.index') }}" 
+                   class="px-5 py-2.5 text-xs font-black text-slate-400 uppercase tracking-wider hover:text-slate-600 transition-colors">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase rounded-2xl shadow-lg shadow-blue-100 transition-all active:scale-95">
+                    Atualizar Dados
+                </button>
+            </div>
+        </form>
     </div>
-</body>
-</html>
+</div>
+@endsection

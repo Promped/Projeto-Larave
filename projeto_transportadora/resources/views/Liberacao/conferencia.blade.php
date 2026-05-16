@@ -1,70 +1,81 @@
 @extends('layout')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6">
-    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-        {{-- Cabeçalho --}}
-        <div class="bg-[#0046AD] p-8 text-white">
+<div class="flex-1 p-8 bg-slate-50 min-h-screen">
+    <div class="bg-white shadow-xl rounded-3xl p-8 max-w-3xl mx-auto border-t-8 border-blue-600">
+        
+        {{-- Cabeçalho Integrado --}}
+        <div class="mb-8 border-b border-slate-100 pb-6">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-3xl font-black tracking-tighter uppercase italic">Conferência Documental e Física</h2>
-                    <p class="text-blue-100 opacity-80">Validação final antes da saída das docas</p>
+                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Conferência Documental e Física</h2>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Validação final de segurança na portaria antes da evasão</p>
                 </div>
-                <span class="text-5xl opacity-20">🚛</span>
+                <span class="text-4xl text-slate-300">📋</span>
             </div>
         </div>
 
-        <form action="{{ route('liberacao.store', $movimentacao->id) }}" method="POST" class="p-8">
+        {{-- Formulário batendo certinho com a sua action e ID da movimentação --}}
+        <form action="{{ route('liberacao.store', $movimentacao->id) }}" method="POST" class="space-y-6">
             @csrf
             
-            {{-- Dados do Veículo --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-6 rounded-2xl border border-gray-200">
+            {{-- Painel de Resumo do Fluxo --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-inner">
                 <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">Veículo / Placa</p>
-                    <p class="text-lg font-bold text-gray-800">{{ $movimentacao->agendamento->veiculo->placa }} - {{ $movimentacao->agendamento->veiculo->modelo }}</p>
+                    <span class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Veículo / Modelo</span>
+                    <p class="text-base font-black text-slate-800 tracking-tight">
+                        <span class="font-mono bg-white border px-2 py-0.5 rounded-lg text-sm mr-2">{{ strtoupper($movimentacao->agendamento->veiculo->placa ?? '') }}</span>
+                        {{ $movimentacao->agendamento->veiculo->modelo ?? 'N/A' }}
+                    </p>
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">Motorista</p>
-                    <p class="text-lg font-bold text-gray-800">{{ $movimentacao->agendamento->motorista->nome }}</p>
+                    <span class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Condutor / Motorista</span>
+                    <p class="text-base font-black text-slate-700 uppercase">{{ $movimentacao->agendamento->motorista->nome ?? 'N/A' }}</p>
                 </div>
             </div>
 
-            {{-- Check-list de Segurança --}}
-            <div class="space-y-4">
-                <h3 class="font-black text-gray-700 uppercase text-sm tracking-widest mb-4">Check-list Obrigatório</h3>
+            {{-- Área do Check-list Obrigatório --}}
+            <div class="space-y-4 pt-4">
+                <h3 class="font-black text-slate-800 uppercase text-xs tracking-widest">Check-list de Segurança em Pátio</h3>
                 
-                {{-- Item 1: Documentação --}}
-                <label class="group flex items-center p-5 border-2 border-gray-100 rounded-2xl hover:border-[#00A859] hover:bg-green-50 transition-all cursor-pointer shadow-sm">
-                    <input type="checkbox" name="check_documentos" value="1" required class="w-6 h-6 rounded-lg text-[#00A859] focus:ring-[#00A859]">
+                {{-- Item 1: Documental --}}
+                <label class="group flex items-start p-4 border border-slate-200 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50/40 transition-all cursor-pointer shadow-sm bg-white">
+                    <input type="checkbox" name="check_documentos" value="1" required 
+                           class="mt-1 w-5 h-5 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-500 transition-all cursor-pointer">
                     <div class="ml-4">
-                        <span class="block font-bold text-gray-800 group-hover:text-green-700">Conferência Documental</span>
-                        <span class="text-sm text-gray-500 italic">NF-e, CNH e Ordem de Saída validados no sistema.</span>
+                        <span class="block font-black text-slate-800 text-sm group-hover:text-emerald-800 transition-colors">Conferência Documental Realizada</span>
+                        <span class="text-xs text-slate-400 font-medium font-sans">NF-e, CNH do condutor e Ordem de Saída validados fisicamente e sistemicamente.</span>
                     </div>
                 </label>
 
                 {{-- Item 2: Físico --}}
-                <label class="group flex items-center p-5 border-2 border-gray-100 rounded-2xl hover:border-[#00A859] hover:bg-green-50 transition-all cursor-pointer shadow-sm">
-                    <input type="checkbox" name="check_fisico" value="1" required class="w-6 h-6 rounded-lg text-[#00A859] focus:ring-[#00A859]">
+                <label class="group flex items-start p-4 border border-slate-200 rounded-2xl hover:border-emerald-500 hover:bg-emerald-50/40 transition-all cursor-pointer shadow-sm bg-white">
+                    <input type="checkbox" name="check_fisico" value="1" required 
+                           class="mt-1 w-5 h-5 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-500 transition-all cursor-pointer">
                     <div class="ml-4">
-                        <span class="block font-bold text-gray-800 group-hover:text-green-700">Conferência Física</span>
-                        <span class="text-sm text-gray-500 italic">Lacre da carga intacto e veículo em condições de rodagem.</span>
+                        <span class="block font-black text-slate-800 text-sm group-hover:text-emerald-800 transition-colors">Vistoria e Carga Concluídas</span>
+                        <span class="text-xs text-slate-400 font-medium font-sans">Lacre da carga intacto, lona de proteção firme e veículo sem avarias aparentes de rodagem.</span>
                     </div>
                 </label>
             </div>
 
-            {{-- Observações --}}
-            <div class="mt-8">
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Observações Adicionais (Opcional)</label>
-                <textarea name="observacoes" rows="3" class="w-full rounded-xl border-gray-200 focus:border-[#0046AD] focus:ring-0 text-sm" placeholder="Ex: Lacre nº 12345 conferido."></textarea>
+            {{-- Observações Operacionais (Grava no request->observacoes) --}}
+            <div class="pt-2">
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Observações Adicionais da Portaria</label>
+                <textarea name="observacoes" rows="3" 
+                          class="block w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all"
+                          placeholder="Ex: Lacre nº 0012345 verificado. Motorista portando EPI obrigatório."></textarea>
             </div>
 
-            {{-- Botões --}}
-            <div class="mt-10 flex gap-4">
-                <a href="{{ route('liberacao.index') }}" class="flex-1 text-center py-4 rounded-xl font-bold text-gray-400 hover:bg-gray-100 transition-all">
-                    CANCELAR
+            {{-- Botões de Decisão --}}
+            <div class="mt-8 flex items-center gap-4 border-t border-slate-100 pt-6">
+                <a href="{{ route('liberacao.index') }}" 
+                   class="flex-1 text-center py-4 text-xs font-black text-slate-400 uppercase tracking-wider hover:text-slate-600 transition-colors">
+                    Cancelar Triagem
                 </a>
-                <button type="submit" class="flex-[2] bg-[#00A859] hover:bg-[#008f4c] text-white py-4 rounded-xl font-black text-lg shadow-xl shadow-green-200 transition-all transform hover:-translate-y-1 uppercase tracking-tighter">
-                    AUTORIZAR SAÍDA E GERAR TICKET
+                <button type="submit" 
+                        class="flex-[2] py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase rounded-2xl shadow-lg shadow-emerald-100 transition-all active:scale-95 tracking-widest text-center">
+                    Autorizar Saída e Avançar
                 </button>
             </div>
         </form>

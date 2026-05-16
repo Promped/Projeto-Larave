@@ -1,26 +1,39 @@
 @extends('layout')
 
 @section('content')
+<div class="flex-1 p-8 bg-slate-50 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-2xl rounded-3xl p-8 max-w-md w-full border-t-8 border-rose-500 text-center">
+        
+        {{-- Ícone Destrutivo de Alerta --}}
+        <div class="w-16 h-16 bg-rose-50 border border-rose-100 text-rose-500 flex items-center justify-center rounded-2xl text-2xl mx-auto mb-4 animate-bounce">
+            ⚠️
+        </div>
 
+        <h2 class="text-xl font-black text-slate-800 uppercase tracking-tighter mb-1">Remover Parametrização?</h2>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-6">Esta ação revogará a lógica de triagem para novos visitantes desta categoria</p>
 
-<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold">Consultar Visitante</h1>
-        <a href="/funcaovisitantes" class="text-sm text-gray-600 hover:underline">Voltar</a>
+        {{-- Caixa de Detalhes Interna --}}
+        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl mb-6 text-left font-bold text-xs uppercase">
+            <span class="text-slate-400 block tracking-wider text-[10px] font-black mb-1">Categoria Selecionada</span>
+            <span class="text-slate-700 text-sm font-black tracking-tight">{{ $funcaovisitante->descricao }}</span>
+        </div>
+
+        {{-- Form de Confirmação Otimizado --}}
+        <form method="POST" action="{{ route('funcaovisitantes.destroy', $funcaovisitante->id) }}">
+            @csrf
+            @method('DELETE')
+            
+            <p class="text-xs text-slate-500 font-bold uppercase tracking-wide mb-6">Confirma a exclusão definitiva deste registro?</p>
+
+            <div class="grid grid-cols-2 gap-3">
+                <a href="{{ route('funcaovisitantes.index') }}" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-xs uppercase rounded-xl transition-all tracking-wider text-center">
+                    Não, Cancelar
+                </a>
+                <button type="submit" class="px-4 py-3 bg-rose-500 hover:bg-rose-600 text-white font-black text-xs uppercase rounded-xl shadow-lg shadow-rose-100 transition-all active:scale-95 tracking-wider">
+                    Sim, Excluir
+                </button>
+            </div>
+        </form>
     </div>
-    <form method="post" action="/funcaovisitantes/{{ $funcaovisitante->id }}">
-        @csrf
-        @method('DELETE')
-        <div class="mb-4">
-            <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
-            <input value="{{$funcaovisitante->descricao}}" type="text" id="descricao" name="descricao" class="shadow-sm block w-full sm:text-sm border-gray-300 rounded-md p-2" disabled>
-        </div>
-        <p class="mb-4">Deseja excluir esse registro?</p>
-        <div class="flex items-center gap-3">
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Sim</button>
-            <a href="/funcaovisitantes" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded">Não</a>
-        </div>
-    </form>
 </div>
-
 @endsection

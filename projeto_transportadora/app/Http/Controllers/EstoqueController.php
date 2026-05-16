@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Insumo;
-use App\Models\Areaspatio; // IMPORTANTE: Importando o model de áreas
+use App\Models\AreaPatio; // Padronizado com a mesma escrita maiúscula do CargaController
 
 class EstoqueController extends Controller
 {
@@ -15,35 +15,35 @@ class EstoqueController extends Controller
         return view('estoque.index', compact('insumos'));
     }
 
-    // Mostra o formulário de criação carregando as áreas do F_B07
+    // Mostra o formulário de criação carregando as áreas
     public function create()
     {
-        $areas = Areaspatio::all(); // Busca todas as áreas cadastradas
+        $areas = AreaPatio::all(); // Atualizado para usar o padrão correto
         return view('estoque.create', compact('areas'));
     }
 
     // Salva o novo insumo
     public function store(Request $request)
-{
-    $request->validate([
-        'nome'              => 'required|string|max:255',
-        'local_armazenagem' => 'required|string',
-        'quantidade_atual'  => 'required|numeric|min:0',
-        'quantidade_minima' => 'required|numeric|min:0',
-        'limite_maximo'     => 'required|numeric|min:1', // O valor vem do JS
-        'unidade_medida'    => 'required|string',
-    ]);
+    {
+        $request->validate([
+            'nome'              => 'required|string|max:255',
+            'local_armazenagem' => 'required|string',
+            'quantidade_atual'  => 'required|numeric|min:0',
+            'quantidade_minima' => 'required|numeric|min:0',
+            'limite_maximo'     => 'required|numeric|min:1', 
+            'unidade_medida'    => 'required|string',
+        ]);
 
-    Insumo::create($request->all());
+        Insumo::create($request->all());
 
-    return redirect()->route('estoque.index')->with('success', 'Insumo adicionado com sucesso!');
-}
+        return redirect()->route('estoque.index')->with('success', 'Insumo adicionado com sucesso!');
+    }
 
     // Carrega o insumo e as áreas disponíveis para edição
     public function edit($id)
     {
         $insumo = Insumo::findOrFail($id);
-        $areas = Areaspatio::all(); // Busca as áreas para poder trocar se precisar
+        $areas = AreaPatio::all(); 
         return view('estoque.edit', compact('insumo', 'areas'));
     }
 

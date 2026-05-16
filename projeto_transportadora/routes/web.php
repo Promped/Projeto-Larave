@@ -18,7 +18,9 @@ use App\Http\Controllers\{
     EstoqueController,
     LiberacaoController,
     TicketController,
-    MovimentacaoPatioController
+    MovimentacaoPatioController,
+    ComposicaoController, // Importado para a montagem de produtos (Kitting)
+    UserController         // IMPORTADO PARA O GERENCIAMENTO DE USUÁRIOS
 };
 use App\Http\Middleware\NivelAdmMiddleware;
 use App\Http\Middleware\NivelCliMiddleware;
@@ -50,6 +52,14 @@ Route::middleware('auth')->group(function () {
         // --- DASHBOARD ---
         Route::get('/inicial-adm', [CargaController::class, 'index'])->name('inicial-adm');
         Route::get('/meu-painel', [CargaController::class, 'index'])->name('admin.dashboard');
+
+        // --- CONTROLE DE CREDENCIAIS / USUÁRIOS ---
+        Route::resource('usuarios', UserController::class);
+
+        // --- MONTAGEM DE PRODUTOS (KITTING) ---
+        // Posicionado estrategicamente antes do resource de cargas para evitar conflito de URL
+        Route::get('/cargas/montar', [ComposicaoController::class, 'create'])->name('cargas.montar');
+        Route::post('/cargas/montar', [ComposicaoController::class, 'store'])->name('cargas.montar.store');
 
         // --- RECURSOS BÁSICOS (CADASTROS) ---
         Route::resource('veiculos', VeiculoController::class);
@@ -91,13 +101,14 @@ Route::middleware('auth')->group(function () {
         });
 
         // --- TICKET DE SAÍDA ---
-Route::prefix('ticket')->group(function () {
-    // Aceita GET e POST para não dar mais erro 405
-    Route::match(['get', 'post'], '/gerar/{id}', [TicketController::class, 'buscar'])->name('ticket.gerar');
-    
-    Route::get('/validar/{id}', [TicketController::class, 'validar'])->name('ticket.validar.view');
-    Route::get('/buscar-cpf', [TicketController::class, 'buscar'])->name('ticket.buscar.cpf');
-});
+        Route::prefix('ticket')->group(function () {
+            // Aceita GET e POST para não dar mais erro 405
+            Route::match(['get', 'post'], '/gerar/{id}', [TicketController::class, 'buscar'])->name('ticket.gerar');
+            
+            // text/view validation 
+            Route::get('/validar/{id}', [TicketController::class, 'validar'])->name('ticket.validar.view');
+            Route::get('/buscar-cpf', [TicketController::class, 'buscar'])->name('ticket.buscar.cpf');
+        });
 
     });
 

@@ -1,30 +1,36 @@
 @extends('layout')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <div class="flex items-center mb-6 border-b-2 border-blue-200 pb-4">
-        <a href="{{ route('estoque.index') }}" class="mr-4 text-blue-600 hover:text-blue-800 transition-colors">
-            ⬅️ Voltar
-        </a>
-        <h2 class="text-2xl font-bold text-blue-800">📝 Editar Insumo: {{ $insumo->nome }}</h2>
-    </div>
+<div class="flex-1 p-8 bg-slate-50 min-h-screen">
+    <div class="bg-white shadow-xl rounded-3xl p-8 max-w-4xl mx-auto border-t-8 border-amber-500">
+        
+        {{-- Cabeçalho Integrado --}}
+        <div class="flex items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+            <a href="{{ route('estoque.index') }}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all active:scale-95 text-xs font-black uppercase tracking-wider">
+                ⬅ Voltar
+            </a>
+            <div>
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tighter">Editar Cadastro de Insumo</h2>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">Modificando dados do registro: <span class="text-slate-700 font-black font-mono">{{ $insumo->nome }}</span></p>
+            </div>
+        </div>
 
-    <div class="bg-white shadow-xl rounded-lg overflow-hidden border border-gray-200 p-8">
+        {{-- Formulário --}}
         <form action="{{ route('estoque.update', $insumo->id) }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @csrf
             @method('PUT')
 
-            {{-- Nome do Insumo --}}
+            {{-- Nome --}}
             <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Nome do Insumo</label>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Nome do Insumo</label>
                 <input type="text" name="nome" value="{{ $insumo->nome }}" 
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 outline-none transition-all" required>
             </div>
 
-            {{-- Local de Armazenagem Dinâmico (F_B07) --}}
+            {{-- Local --}}
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Local de Armazenagem (Áreas do Pátio)</label>
-                <select name="local_armazenagem" id="local_armazenagem" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required onchange="atualizarLimite()">
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Local de Armazenagem</label>
+                <select name="local_armazenagem" id="local_armazenagem" class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 outline-none transition-all cursor-pointer" required onchange="atualizarLimite()">
                     @foreach($areas as $area)
                         <option value="{{ $area->nome }}" 
                             data-capacidade="{{ $area->capacidade }}"
@@ -35,42 +41,41 @@
                 </select>
             </div>
 
-            {{-- Unidade de Medida --}}
+            {{-- Medida --}}
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Unidade de Medida</label>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Unidade de Medida</label>
                 <input type="text" name="unidade_medida" value="{{ $insumo->unidade_medida }}" 
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 outline-none transition-all" required>
             </div>
 
-            {{-- Quantidade Atual --}}
+            {{-- Qtd Atual --}}
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Quantidade Atual (Saldo)</label>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Quantidade Atual (Saldo Físico)</label>
                 <input type="number" step="0.01" name="quantidade_atual" value="{{ $insumo->quantidade_atual }}" 
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 outline-none transition-all font-mono" required>
             </div>
 
-            {{-- Quantidade Mínima --}}
+            {{-- Qtd Mínima --}}
             <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Quantidade Mínima (Alerta 🚨)</label>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Quantidade Mínima de Segurança</label>
                 <input type="number" step="0.01" name="quantidade_minima" value="{{ $insumo->quantidade_minima }}" 
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required>
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50/50 font-bold text-slate-700 text-sm focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 outline-none transition-all font-mono" required>
             </div>
 
-            {{-- Limite Máximo (Travado pela Área escolhida) --}}
+            {{-- Limite Máximo --}}
             <div class="md:col-span-2">
-                <label class="block text-sm font-bold text-gray-700 mb-2">Limite Máximo (Capacidade Total da Área)</label>
+                <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Limite Máximo Restritivo</label>
                 <input type="number" step="0.01" name="limite_maximo" id="limite_maximo" value="{{ $insumo->limite_maximo }}" 
-                    class="w-full px-4 py-2 border bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required readonly>
-                <p class="text-xs text-gray-500 mt-1 italic">*Vinculado automaticamente à capacidade definida em Áreas do Pátio.</p>
+                    class="w-full px-4 py-3 border border-slate-200 bg-slate-100 rounded-xl font-black text-slate-500 text-sm outline-none font-mono" required readonly>
             </div>
 
-            {{-- Botões --}}
-            <div class="md:col-span-2 flex justify-end gap-4 mt-4">
-                <a href="{{ route('estoque.index') }}" class="px-6 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
-                    Cancelar
+            {{-- Ações --}}
+            <div class="md:col-span-2 flex justify-end gap-4 mt-6 border-t border-slate-100 pt-6">
+                <a href="{{ route('estoque.index') }}" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black text-xs uppercase rounded-xl transition-all text-center tracking-wider">
+                    Cancelar Edição
                 </a>
-                <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow-lg transition-colors">
-                    🔄 Atualizar Insumo
+                <button type="submit" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-black text-xs uppercase rounded-xl shadow-lg shadow-amber-100 transition-all active:scale-95 tracking-wider">
+                    🔄 Atualizar Registro de Saldo
                 </button>
             </div>
         </form>
@@ -82,8 +87,7 @@
         const select = document.getElementById('local_armazenagem');
         const inputLimite = document.getElementById('limite_maximo');
         const capacidade = select.options[select.selectedIndex].getAttribute('data-capacidade');
-        
-        inputLimite.value = capacidade;
+        inputLimite.value = capacidade ? capacidade : '';
     }
 </script>
 @endsection

@@ -1,4 +1,3 @@
-
 <aside class="flex flex-col w-full md:w-72 bg-[#0046AD] min-h-screen text-white shadow-2xl">
     <div class="p-6">
         <h3 class="text-xl font-black mb-8 border-b border-white/10 pb-4 tracking-tighter italic">
@@ -12,73 +11,99 @@
                 <span class="mr-3 text-lg">📊</span> Painel Geral
             </a>
 
+            @php
+                // Helper para verificar se o usuário logado é Master/Admin de forma segura
+                $isMaster = auth()->check() && (strtolower(trim(auth()->user()->role)) === 'master' || strtolower(trim(auth()->user()->role)) === 'admin');
+            @endphp
+
+            {{-- CONTROLE EXCLUSIVO MASTER: USUÁRIOS DO SISTEMA --}}
+            @if($isMaster)
+                <div class="mt-8 mb-2 px-4 text-[10px] font-black text-amber-300 uppercase tracking-[0.2em]">
+                    Segurança Central
+                </div>
+                <a href="{{ route('usuarios.index') }}" 
+                    class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('usuarios.*') ? 'bg-amber-500 shadow-lg font-bold text-white' : 'text-amber-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">🔑</span> Gerenciar Usuários
+                </a>
+            @endif
+
             {{-- OPERAÇÃO DE PÁTIO --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
                 Operação de Pátio 
             </div>
 
-            {{-- F_F01 --}}
-            <a href="{{ route('agendamentos.index') }}" 
-                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('agendamentos.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📅</span> Agendamentos
-            </a>
+            {{-- AGENDAMENTOS: SOMENTE MASTER VE --}}
+            @if($isMaster)
+                <a href="{{ route('agendamentos.index') }}" 
+                    class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('agendamentos.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">📅</span> Agendamentos
+                </a>
+            @endif
 
-            {{-- F_F03 --}}
+            {{-- ENTRADAS / SAÍDAS: OPERADOR TAMBÉM VÊ --}}
             <a href="{{ route('movimentacoes.index') }}" 
                 class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('movimentacoes.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">🚛</span>  Entradas / Saídas
             </a>
 
-            {{-- F_F04: OCORRÊNCIAS (Apontando para a função do RelatorioController corrigida) --}}
+            {{-- OCORRÊNCIAS: OPERADOR TAMBÉM VÊ --}}
             <a href="{{ route('patio.ocorrencia') }}" 
                 class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('patio.ocorrencia') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">⚠️</span>   Ocorrências
             </a>
 
-            {{-- F_F05 --}}
+            {{-- LIBERAÇÃO FINAL: SOMENTE MASTER VE --}}
+            @if($isMaster)
                 <a href="{{ route('liberacao.index') }}" 
                     class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('liberacao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                     <span class="mr-3 text-base">✅</span>   Liberação Final
                 </a>
+            @endif
 
-            {{-- PRODUÇÃO & ESTOQUE --}}
+            {{-- ESTOQUE & PRODUÇÃO --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
-                Estoque
+                Estoque & Produção
             </div>
             
+            {{-- ESTOQUE ATUAL: OPERADOR TAMBÉM VÊ --}}
             <a href="{{ route('estoque.index') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('estoque.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📦</span>   Estoque
+                <span class="mr-3 text-base">📦</span>   Estoque Atual
             </a>
 
-            {{-- 
-                RETIRADO E NÃO FUNCIONANDO
-                <a href="{{ route('producao.index') }}" 
-                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('producao.*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                    <span class="mr-3 text-base">🛠️</span>  Produção
+            {{-- MONTAGEM DE PRODUTOS: SOMENTE MASTER VE --}}
+            @if($isMaster)
+                <a href="{{ route('cargas.montar') }}" 
+                   class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('cargas.montar') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">🛠️</span>   Montar Produto
                 </a>
-            --}}
+            @endif
 
             {{-- CADASTROS BASE --}}
             <div class="mt-8 mb-2 px-4 text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em]">
                 Cadastros Base
             </div>
             @php
+                // Montamos a lista de cadastros aplicando o filtro dinâmico
+                // Removido da lista: Funções, Áreas e Vagas para o operador (Somente o Master verá estes)
                 $cadastros = [
-                    ['r' => 'transportadoras.index', 'i' => '🏢', 'l' => ' Fornecedores'],
-                    ['r' => 'veiculos.index', 'i' => '🚚', 'l' => 'Veículos'],
-                    ['r' => 'motoristas.index', 'i' => '👨‍✈️', 'l' => ' Motoristas'],
-                    ['r' => 'cargas.index', 'i' => '📦', 'l' => ' Cargas'],
-                    ['r' => 'funcaovisitantes.index', 'i' => '🛂', 'l' => 'Funções'],
-                    ['r' => 'areaspatio.index', 'i' => '📍', 'l' => ' Áreas'],
-                    ['r' => 'vagas.index', 'i' => '🅿️', 'l' => ' Vagas'],
+                    ['r' => 'transportadoras.index', 'i' => '🏢', 'l' => ' Fornecedores', 'masterOnly' => false],
+                    ['r' => 'veiculos.index', 'i' => '🚚', 'l' => 'Veículos', 'masterOnly' => false],
+                    ['r' => 'motoristas.index', 'i' => '👨‍✈️', 'l' => ' Motoristas', 'masterOnly' => false],
+                    ['r' => 'cargas.index', 'i' => '📦', 'l' => ' Cargas', 'masterOnly' => false],
+                    ['r' => 'funcaovisitantes.index', 'i' => '🛂', 'l' => 'Funções', 'masterOnly' => true],
+                    ['r' => 'areaspatio.index', 'i' => '📍', 'l' => ' Áreas', 'masterOnly' => true],
+                    ['r' => 'vagas.index', 'i' => '🅿️', 'l' => ' Vagas', 'masterOnly' => true],
                 ];
             @endphp
             @foreach($cadastros as $c)
-                <a href="{{ route($c['r']) }}" 
-                   class="px-4 py-2 rounded-lg text-[13px] flex items-center transition-all {{ request()->routeIs($c['r'].'*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
-                    <span class="mr-3 text-base">{{ $c['i'] }}</span> {{ $c['l'] }}
-                </a>
+                {{-- Só renderiza se não for restrito ao master, OU se for restrito mas o usuário for Master --}}
+                @if(!$c['masterOnly'] || $isMaster)
+                    <a href="{{ route($c['r']) }}" 
+                       class="px-4 py-2 rounded-lg text-[13px] flex items-center transition-all {{ request()->routeIs($c['r'].'*') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
+                        <span class="mr-3 text-base">{{ $c['i'] }}</span> {{ $c['l'] }}
+                    </a>
+                @endif
             @endforeach
 
             {{-- RELATÓRIOS --}}
@@ -86,32 +111,26 @@
                 Relatórios & Saída
             </div>
             
-            <a href="{{ route('relatorios.gerencial') }}" 
-               class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.gerencial') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
-                <span class="mr-3 text-base">📈</span>  Gerencial
-            </a>
+            {{-- RELATÓRIO GERENCIAL: SOMENTE MASTER VE --}}
+            @if($isMaster)
+                <a href="{{ route('relatorios.gerencial') }}" 
+                   class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.gerencial') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
+                    <span class="mr-3 text-base">📈</span>   Gerencial
+                </a>
+            @endif
             
+            {{-- HISTÓRICO: OPERADOR TAMBÉM VÊ --}}
             <a href="{{ route('relatorios.historico') }}" 
                class="px-4 py-2.5 rounded-lg text-sm flex items-center transition-all {{ request()->routeIs('relatorios.historico') ? 'bg-[#00A859] shadow-lg font-bold text-white' : 'text-blue-100 hover:bg-white/10' }}">
                 <span class="mr-3 text-base">📜</span> Histórico
             </a>
 
-            <a href="{{ route('relatorios.gerencial') }}" 
-                class="mt-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center font-bold hover:bg-red-600 hover:text-white transition-all animate-pulse">
-                <span class="mr-2 text-base">🚨</span>  Alerta de Estoque
-            </a>
+            @if($isMaster)
+                <a href="{{ route('relatorios.gerencial') }}" 
+                    class="mt-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center font-bold hover:bg-red-600 hover:text-white transition-all animate-pulse">
+                    <span class="mr-2 text-base">🚨</span>   Alerta de Estoque
+                </a>
+            @endif
         </nav>
     </div>
 </aside>
-
-<script>
-    function aviso(modulo) {
-        alert("O módulo " + modulo + " ainda está sendo finalizado. Em breve estará disponível!");
-    }
-</script>
-
-<style>
-    .custom-scroll::-webkit-scrollbar { width: 4px; }
-    .custom-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-</style>

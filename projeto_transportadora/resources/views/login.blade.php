@@ -32,10 +32,13 @@
         }
         
         .btn-primary {
-            background-color: #0d6efd;
+            background-color: #1565c0;
             border: none;
             padding: 12px;
             font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #0d47a1;
         }
     </style>
 </head>
@@ -57,16 +60,19 @@
                     <h3 class="fw-black text-uppercase" style="font-size: 2.5rem; font-weight: 900; color: #222;">Login</h3>
                 </div>
 
+                {{-- Feedback de Erro Operacional unificado --}}
                 @if ($errors->any())
-                    <div class="alert alert-danger shadow-sm">
-                        {{ $errors->first() }}
+                    <div class="alert alert-danger shadow-sm border-0 rounded-3 text-uppercase font-weight-bold" style="font-size: 0.75rem;">
+                        ⚠️ {{ $errors->first() }}
                     </div>
                 @endif
 
-                <form method="POST" action="/login">
+                <form method="POST" action="{{ route('login') }}">
                     @csrf
+                    
+                    {{-- Campo Email --}}
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-bold text-muted small uppercase">E-mail</label>
+                        <label for="email" class="form-label fw-bold text-muted small text-uppercase">E-mail</label>
                         <input type="email" 
                                class="form-control form-control-lg shadow-sm @error('email') is-invalid @enderror" 
                                id="email" 
@@ -74,28 +80,19 @@
                                value="{{ old('email') }}" 
                                required 
                                autofocus>
-                        @error('email')
-                        <div class="invalid-feedback font-weight-bold">
-                            {{ $message }}
-                        </div>
-                        @enderror
                     </div>
 
+                    {{-- Campo Senha --}}
                     <div class="mb-4">
-                        <label for="password" class="form-label fw-bold text-muted small uppercase">Senha</label>
+                        <label for="password" class="form-label fw-bold text-muted small text-uppercase">Senha</label>
                         <input type="password" 
                                class="form-control form-control-lg shadow-sm @error('password') is-invalid @enderror" 
                                id="password" 
                                name="password" 
                                required>
-                        @error('password')
-                        <div class="invalid-feedback font-weight-bold">
-                            {{ $message }}
-                        </div>
-                        @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 shadow uppercase tracking-wider">Entrar</button>
+                    <button type="submit" class="btn btn-primary w-100 shadow text-uppercase tracking-wider">Entrar</button>
                 </form>
 
                 <div class="mt-5 text-center">

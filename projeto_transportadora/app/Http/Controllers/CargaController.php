@@ -66,8 +66,7 @@ class CargaController extends Controller
     }
 
     /**
-     * Exibe o formulário de criação de nova carga (Novo Material)
-     * Mantém o estilo que você já tem na view.
+     * Exibe o formulário de criação de nova carga
      */
     public function create()
     {
@@ -75,14 +74,53 @@ class CargaController extends Controller
     }
 
     /**
-     * Salva a nova carga no banco de dados (MODO TESTE FLASH)
+     * Salva a nova carga no banco de dados
      */
     public function store(Request $request)
     {
-        // Pega tudo que o formulário enviar e tenta criar
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+            'unidade_medida' => 'required|string',
+        ]);
+
         Carga::create($request->all());
 
-        // Redireciona de volta para a lista
-        return redirect()->route('cargas.index');
+        return redirect()->route('cargas.index')->with('success', 'Material cadastrado com sucesso!');
+    }
+
+    /**
+     * COMPONENTE ADICIONADO: Abre a tela de edição trazendo os dados da carga
+     */
+    public function edit($id)
+    {
+        $carga = Carga::findOrFail($id);
+        return view('cargas.edit', compact('carga'));
+    }
+
+    /**
+     * COMPONENTE ADICIONADO: Executa a atualização dos dados no banco
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tipo' => 'required|string|max:255',
+            'unidade_medida' => 'required|string',
+        ]);
+
+        $carga = Carga::findOrFail($id);
+        $carga->update($request->all());
+
+        return redirect()->route('cargas.index')->with('success', 'Material atualizado com sucesso!');
+    }
+
+    /**
+     * COMPONENTE ADICIONADO: Remove o material do sistema
+     */
+    public function destroy($id)
+    {
+        $carga = Carga::findOrFail($id);
+        $carga->delete();
+
+        return redirect()->route('cargas.index')->with('success', 'Material excluído do sistema!');
     }
 }
